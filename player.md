@@ -15,7 +15,8 @@ OnQ CMS players are the cloud endpoint for the physical media players that run t
 |-----------|------|-------------|
 | name | string | The name of the player (as it appears on CMS). Does not need to be unique. |
 | uid | string | The unique ID that identifies the player to the onQ CMS. |
-| resolution | Object {width:int,height:int} | The resolution of the player's display in pixels. |
+| resolution_width | integer | The resolution width of the player's display in pixels. |
+| resolution_height | integer | The resolution height of the player's display in pixels. |
 | folder | array (string) | The folder that the player is stored in. Contains the full folder path, with the 'leftmost' item being the closest to root level. For example, an asset stored in a 'campaigns' folder, which is itself stored in a 'marketing' folder would have a folder value of \["marketing","campaigns"\]. |
 | tags | array (string) | A list of tags that control what assets will playback on this player. |
 | last_update | string | A timestamp of when the player last checked in with onQ CMS. Format "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" - eg 2024-04-14T10:35:53+10:00 |
@@ -27,10 +28,8 @@ OnQ CMS players are the cloud endpoint for the physical media players that run t
 {
     "name":"Demo Player",
     "uid":"demo123",
-    "resolution":{
-        "width":1920,
-        "height":1080
-    },
+    "resolution_width":1920,
+    "resolution_height":1080,
     "folder":["Australia","Demo"],
     "tags":["demo","AU"],
     "last_update":"2022-04-14T10:35:53+10",
