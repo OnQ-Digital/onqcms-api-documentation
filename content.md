@@ -4,6 +4,7 @@ The onQ CMS API allows users to fetch, upload, edit and delete content. Content 
 
 - [Fetch Content](#fetch-content)
 - [Create Content](#create-content)
+- [Create Content from URL](#create-content-from-url)
 - [Update Content](#update-content)
 - [Delete Content](#delete-content)
 - [Create Content Folder](#create-content-folder)
@@ -15,14 +16,17 @@ The onQ CMS API allows users to fetch, upload, edit and delete content. Content 
 
 ### Asset Parameters
 
-| Parameter  | Type                     | Description                                                                                                                           |
-|------------|--------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| name       | string                   | The name of the asset (as it appears on CMS). Does not need to be unique. |
-| uid        | string                   | The unique ID that identifies the asset to the onQ CMS. Created by onQ CMS when the asset is created. |
-| type       | string                   | The type of the asset, currently only "jpeg", "mp4" and "png" are supported via the API. |
-| folder     | array (string)           | The folder that the asset is stored in. Contains the full folder path, with the 'leftmost' item being the closest to root level. For  example, an asset stored in a 'campaigns' folder, which is itself stored in a 'marketing' folder would have a folder value of ["marketing","campaigns"]. |
-| references | array (string)           | A list of additional names that refer to this asset. Used to provide an additional name/tag against the asset in the proof of play reports. |
-| validity   | object (see table below) | An object that defines whether an asset is valid to play, regardless of whether it is an active playlist or not. |
+| Parameter  | Type                      |Description                                                                                                                           |
+|-------------|--------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| name        | string                   | The name of the asset (as it appears on CMS). Does not need to be unique. |
+| uid         | string                   | The unique ID that identifies the asset to the onQ CMS. Created by onQ CMS when the asset is created. |
+| file_width  | integer                  | The pixel dimensions of the asset. Set by the CMS when an asset is created on the system. |
+| file_height | integer                  | The pixel dimensions of the asset. Set by the CMS when an asset is created on the system. |
+| error       | object (see table below) | 
+| type        | string                   | The type of the asset, currently only "jpeg", "mp4" and "png" are supported via the API. |
+| folder      | array (string)           | The folder that the asset is stored in. Contains the full folder path, with the 'leftmost' item being the closest to root level. For  example, an asset stored in a 'campaigns' folder, which is itself stored in a 'marketing' folder would have a folder value of ["marketing","campaigns"]. |
+| references  | array (string)           | A list of additional names that refer to this asset. Used to provide an additional name/tag against the asset in the proof of play reports. |
+| validity    | object (see table below) | An object that defines whether an asset is valid to play, regardless of whether it is an active playlist or not. |
 
 ### Validity Parameters
 
@@ -40,6 +44,8 @@ The onQ CMS API allows users to fetch, upload, edit and delete content. Content 
 {
     "name":"Demo Move.mp4",
     "uid":"demo_uid_1234",
+    "file_width":1920,
+    "file_height":1080,
     "type":"mp4",
     "folder":["marketing","campaigns"],
     "references":["demo","movies"],
@@ -57,7 +63,7 @@ The onQ CMS API allows users to fetch, upload, edit and delete content. Content 
 ## Fetch Content
 
 ### Endpoint: content/fetch
-### Response: JSON array of Asset Objects (see 2.1)
+### Response: JSON array of [Asset Objects](#asset-parameters)
 
 ### Request Parameters 
 
@@ -84,11 +90,11 @@ https://onqcms.com/api/content/fetch
 ```
 This request will fetch all mp4 content with "demo" in its name in the campaigns folder (which is in the marketing folder), but not any of its sub-folders. The assets must have the references "demo" and "demo_vid" to be returned.
 
-## Create an Asset
+## Create Content
 
 ### Endpoint: content/create
 ### Encoding: multi-part/form
-### Response: JSON Asset Object (see 2.1)
+### Response: JSON array of [Asset Objects](#asset-parameters)
 
 The request to create an asset must have the multi-part/form encoding. 
 
@@ -106,17 +112,7 @@ The request to create an asset must have the multi-part/form encoding.
 | name       | string                   | True | The name of the asset (as it appears on CMS). Does not need to be unique. |
 | folder     | array (string)           | False | The folder that the asset is stored in. Contains the full folder path, with the 'leftmost' item being the closest to root level. For example, an asset stored in a 'campaigns' folder, which is itself stored in a 'marketing' folder would have a folder value of ["marketing","campaigns"]. Asset will be stored at the root level if not present.
 | references | array (string)           | False | A list of additional names that refer to this asset. Used to provide an additional name/tag against the asset in the proof of play reports.
-| validity   | object (see table below) | False | An object that defines whether an asset is valid to play, regardless of whether it is an active playlist or not. See table below for values. |
-
-### Validity JSON Object
-
-| Parameter             | Type    | Description |
-|-----------------------|---------|-------------|
-| start_date            | string  | The asset will not play before this date. YYYY-MM-DD format, eg 2022-07-15. |
-| end_date              | string  | The asset will not play after this date. YYYY-MM-DD format, eg 2022-09-15. |
-| start_time            | string  | The asset will not play before this time. HH:MM format, 24 hour time, eg 07:00. |
-| end-time              | string  | The asset will not play after this time. HH:MM format, 24 hour time, eg 17:00. |
-| date_time_independent | boolean | If true, the date and time conditions are evaluated separately - the asset will only play between the valid times between the valid dates. If false, the asset will play constantly after the valid time and date until the end time and date. |
+| validity   | [Validity JSON Object](#validity-parameters) | False | An object that defines whether an asset is valid to play, regardless of whether it is an active playlist or not. |
 
 ### Example Request
 ```
@@ -137,6 +133,45 @@ curl -H "Authorization: bearer demo1234" \
 https://onqcms.com/api/content/create
 ```
 The above snippet adds the **demo video.mp4** file as an asset to the onqCMS. It has the name **demo video** and the additional references **demo** and **demo_vid** which will appear in any proof of play reports.. The asset will be located in the **campaigns** content folder, which is in the **marketing** folder. The asset will only play between 7AM and 3PM every day after 2022-07-15 and before 2022-09-15 even if it is in an assigned and active playlist.
+
+[Top](#content)
+
+## Create Content from URL
+
+### Endpoint: content/create-from-url
+### Response: Json Object with key-value {"job_id":"job123"}. Job result can be fetched via the [API job request endpoint](api-job.md). The [Asset Object](#asset-parameters) are set as the payload of the completed job.
+
+The system will fetch an asset from the provided URL and add it to the content
+library. We can also choose to use the URL as a UID for future referencing of the file. NOTE - if you choose to use the URL as the UID, any future attempts to download from that URL will be ignored as duplicates.
+
+### Request Parameters
+
+| Parameter  | Type | Required          | Description |
+|------------|------|-------------------|-------------|
+| name       | string                   | True | The name of the asset (as it appears on CMS). Does not need to be unique. |
+| url        | string                   | True  | The url to download the asset from. |
+| url_is_uid | boolean                  | False | False by default. If false, the system will generate an id for the new content. New assets can be created by downloading from the provided url. If true, the system won't create a new asset if there is one that already has this url. The url can be used to reference the asset where specified in the API. |
+| folder     | array (string)           | False | The folder that the asset is stored in. Contains the full folder path, with the 'leftmost' item being the closest to root level. For example, an asset stored in a 'campaigns' folder, which is itself stored in a 'marketing' folder would have a folder value of ["marketing","campaigns"]. Asset will be stored at the root level if not present.
+| references | array (string)           | False | A list of additional names that refer to this asset. Used to provide an additional name/tag against the asset in the proof of play reports.
+| validity   | [Validity JSON Object](#validity-parameters) | False | An object that defines whether an asset is valid to play, regardless of whether it is an active playlist or not. |
+
+### Example Request
+```
+curl -H "Authorization: bearer demo1234" -X POST -d '{
+    "name":"URL Demo",
+    "folder":["Demo"],
+    "url":"https://demo.com/demo_file123.mp4,
+    "url_is_uid":true,
+    "references":["from url"]
+    "validity":{
+        "start_date":"2024-01-01",
+        "start_time":"07:00"
+    }
+}' \
+https://onqcms.com/api/content/update
+```
+The above snippet adds the file stored at **https://demo.com/demo_file123.mp4** file as an asset to the onqCMS. It has the name **URL Demo** and the additional reference **from url** which will appear in any proof of play reports. The asset will be located in the **Demo** content folder The asset will only play between 7AM and 3PM every day after 2022-07-15 and before 2022-09-15 even if it is in an assigned and active playlist. The "url_is_uid" has been set, allowing us to refer to this file by its URL where indicated in other API requests. Additionally, any attempts to upload
+an asset with the url **https://demo.com/demo_file123.mp4** will be rejected unless this file is deleted.
 
 [Top](#content)
 
