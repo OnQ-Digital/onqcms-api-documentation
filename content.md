@@ -139,7 +139,7 @@ The above snippet adds the **demo video.mp4** file as an asset to the onqCMS. It
 ## Create Content from URL
 
 ### Endpoint: content/create-from-url
-### Response: [API Job Request Object](api-job.md) with an [Asset Object](#asset-parameters) as payload
+### Response: Json Object with key-value {"job_id":"job123"}. Job result can be fetched via the [API job request endpoint](api-job.md). The [Asset Object](#asset-parameters) are set as the payload of the completed job.
 
 The system will fetch an asset from the provided URL and add it to the content
 library. We can also choose to use the URL as a UID for future referencing of the file. NOTE - if you choose to use the URL as the UID, any future attempts to download from that URL will be ignored as duplicates.
