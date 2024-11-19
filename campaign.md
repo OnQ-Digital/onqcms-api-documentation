@@ -43,7 +43,8 @@ The CMS expects an array of template structure objects as the input
 | name                | string            | True      | Campaign type name  |
 | template_structure  | array (template structure object) | True  | These objects specify details such as the campaign slot type, playback settings, duration, and additional attributes.|
 
-***
+---
+
 <br>
 
 **Template_Structure Asset JSON Object**
@@ -56,9 +57,9 @@ The CMS expects an array of template structure objects as the input
 | truncate            | Boolean           | True      | Truncate option           |
 
 
-
 `Example request:`
-```
+
+```json
 {
   "company_group_id": 3,
   "name": "David Jones Campaigns",
@@ -72,7 +73,8 @@ The CMS expects an array of template structure objects as the input
 ```
 
 `Success Response:`
-```
+
+```json
 {
   "campaign_type_id": 2,
   "company_group_id": 3,
@@ -86,18 +88,19 @@ The CMS expects an array of template structure objects as the input
   "createdAt": "2024-10-01T10:00:00.000Z",
   "updatedAt": "2024-10-01T10:00:00.000Z"
 }
+
 ```
 
 `Error Response:`
 
 - Status: 400 Bad Request
-```
+```json
 {
   "error": "Invalid input data"
 }
 ```
 - Status: 500 Internal Server Error
-```
+```json
 {
   "error": "Failed to save campaign type"
 }
@@ -112,15 +115,17 @@ Endpoint: https://onqcms.com/api/campaign/type/fetch
 #### 2.1.2.1. List All Campaign
 
 `Request:`
-```
+
+```json
 {
   "company_group_id": 1
 }
 ```
+
 `Success Response:`
 
 - Status: 200 OK
-```
+```json
 [
     {
         "campaign_type_id": 1,
@@ -141,11 +146,12 @@ Endpoint: https://onqcms.com/api/campaign/type/fetch
   ...
 ]
 ```
+
 #### 2.1.2.2. Fetch a campaign type by ID
 
 `Request:`
 
-```
+```json
 {
   "campaign_type_id": 2,
   "company_group_id": 1
@@ -153,7 +159,7 @@ Endpoint: https://onqcms.com/api/campaign/type/fetch
 ```
 `Success Response:`
 - Status: 200 OK
-```
+```json
 {
   "campaign_type_id": 2,
   "company_group_id": 1,
@@ -165,7 +171,7 @@ Endpoint: https://onqcms.com/api/campaign/type/fetch
 ```
 `Error Response:`
 - Status: 404 Not Found
-```
+```json
 {
   "error": "Campaign type not found"
 }
@@ -176,7 +182,7 @@ Endpoint: https://onqcms.com/api/campaign/type/fetch
 Endpoint: https://onqcms.com/api/campaign/type/edit	
 
 `Request:`
-```
+```json
 {
   "campaign_type_id": 2,
   "company_group_id": 1,
@@ -186,7 +192,7 @@ Endpoint: https://onqcms.com/api/campaign/type/edit
 ```
 `Response:`
 - Satus: 200 OK
-```
+```json
 {
   "campaign_type_id": 2,
   "company_group_id": 1,
@@ -199,7 +205,7 @@ Endpoint: https://onqcms.com/api/campaign/type/edit
 
 `Error Response:`
 - Status: 404 Not Found
-```
+```json
 {
   "error": "Campaign type not found"
 }
@@ -210,7 +216,7 @@ Endpoint: https://onqcms.com/api/campaign/type/edit
 Endpoint: https://onqcms.com/api/campaign/type/delete	
 
 `Request:`
-```
+```json
 {
   "campaign_type_id": 2,
   "company_group_id": 1
@@ -225,7 +231,7 @@ Endpoint: https://onqcms.com/api/campaign/type/delete
 `Error Response:`
 
 - Status: 404 Not Found
-```
+```json
 {
   "error": "Campaign type not found"
 }
@@ -276,7 +282,7 @@ Endpoint: https://onqcms.com/api/campaign/create
 | mediaplayer_id      | array             | False     | assigned media player ID  |
 
 `Request:`
-```
+```json
 {
   "company_group_id": 3,
   "name": "DJ Campaign",
@@ -305,7 +311,7 @@ Endpoint: https://onqcms.com/api/campaign/create
 `Success Response:`
 
 - Status: 201 Created
-```
+```json
 {
   "campaign_id": 1
   "company_group_id": 3,
@@ -338,7 +344,7 @@ Endpoint: https://onqcms.com/api/campaign/create
 ```
 `Error Response:`
 - Status: 400 Bad Request
-```
+```json
 {
   "error": "Invalid input data"
 }
@@ -365,7 +371,7 @@ Endpoint: https://onqcms.com/api/campaign/fetch
 
 #### 2.2.2.1. Fetch all campaign by group
 `Request:`
-```
+```json
 {
     "company_group_id": 3,
     "campaign_id": 49,
@@ -380,7 +386,7 @@ Endpoint: https://onqcms.com/api/campaign/fetch
 ```
 `Success Response:`
 - Status: 200 OK
-```
+```json
 [
     {
         "campaign_id": 1,
@@ -415,7 +421,7 @@ Endpoint: https://onqcms.com/api/campaign/fetch
 
 #### 2.2.2.2. Fetch a campaign with sub divisions (campaigns)
 `Request:`
-```
+```json
 {
     "company_group_id": 3,
     "campaign_id": 49,
@@ -431,7 +437,7 @@ Endpoint: https://onqcms.com/api/campaign/fetch
 `Success Response:`
 
 - Status: 200 OK
-```
+```json
 [
     {
         "campaign_id": 9,
@@ -482,7 +488,7 @@ Endpoint: https://onqcms.com/api/campaign/fetch
 `Error Response:`
 
 - Status: 404 Not Found
-```
+```json
 {
   "error": "Campaign not found"
 }
@@ -521,7 +527,7 @@ Endpoint: https://onqcms.com/api/campaign/edit
 To remove start_data, start_time, end_date and end_time values, set empty value for the key. Any unset key will keep existing values.
 
 `Request:`
-```
+```json
 {
   "company_group_id": 3,
   "campaign_id": 12,
@@ -551,7 +557,7 @@ To remove start_data, start_time, end_date and end_time values, set empty value 
 `Response:`
 
 - Satus: 200 OK
-```
+```json
 {
   "campaign_id": 12,
   "company_group_id": 1,
@@ -569,7 +575,7 @@ To remove start_data, start_time, end_date and end_time values, set empty value 
 
 `Error Response:`
 - Status: 404 Not Found
-```
+```json
 {
   "error": "Campaign not found"
 }
@@ -582,7 +588,7 @@ To remove start_data, start_time, end_date and end_time values, set empty value 
 Endpoint: https://onqcms.com/api/campaign/delete
 
 `Request:`
-```
+```json
 {
   "campaign_id": 12
 }
@@ -596,7 +602,7 @@ Endpoint: https://onqcms.com/api/campaign/delete
 `Error Response:`
    
 - Status: 404 Not Found
-```
+```json
 {
   "error": "Campaign not found"
 }
@@ -619,7 +625,7 @@ Endpoint: https://onqcms.com/api/campaign/availability
 | mediaplayer_id      | array             | False     | media player ID or null for all player |
 
 `Request:`
-```
+```json
 {
     "company_group_id": 3,
     "start_date_time": "2024-10-02 00:00:00",
@@ -632,7 +638,7 @@ Endpoint: https://onqcms.com/api/campaign/availability
 
 `Response:`
 
-```
+```json
 {
     "2024-10-02": [
         {
