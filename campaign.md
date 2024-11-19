@@ -1,7 +1,8 @@
 # 1. Campaign
 
 The onQ CMS API allows users to create, edit and delete campaign.<br>
-At the moment, this API is for **internal use only** (Authentication: Session-Based Authentication is used.)
+At the moment, this API is for **internal use only** (Authentication: Session-Based Authentication is used.)<br>
+*API authentication need to be implemented on every endpoint.*
 
 # 2. TOC
 - [1. Campaign](#1-campaign)
@@ -23,6 +24,7 @@ At the moment, this API is for **internal use only** (Authentication: Session-Ba
     - [2.2.4. Delete single or multiple  campaigns](#224-delete-single-or-multiple--campaigns)
     - [2.2.5. Campaign Availability](#225-campaign-availability)
 
+[Back to Home](README.md)
 
 ## 2.1. Campaign Type
 Base URL: https://onqcms.com/api/campaign/type
@@ -101,6 +103,8 @@ The CMS expects an array of template structure objects as the input
 }
 ```
 
+[Top ↑](#1-campaign)
+
 
 ### 2.1.2. Fetch campaigns type by ID OR All
 Endpoint: https://onqcms.com/api/campaign/type/fetch	
@@ -166,6 +170,7 @@ Endpoint: https://onqcms.com/api/campaign/type/fetch
   "error": "Campaign type not found"
 }
 ```
+[Top ↑](#1-campaign)
 
 ### 2.1.3. Update a campaign type by ID
 Endpoint: https://onqcms.com/api/campaign/type/edit	
@@ -199,6 +204,7 @@ Endpoint: https://onqcms.com/api/campaign/type/edit
   "error": "Campaign type not found"
 }
 ```
+[Top ↑](#1-campaign)
 
 ### 2.1.4. Delete single or multiple campaign types
 Endpoint: https://onqcms.com/api/campaign/type/delete	
@@ -225,7 +231,7 @@ Endpoint: https://onqcms.com/api/campaign/type/delete
 }
 ```
 
-
+[Top ↑](#1-campaign)
 
 
 
@@ -337,6 +343,7 @@ Endpoint: https://onqcms.com/api/campaign/create
   "error": "Invalid input data"
 }
 ```
+[Top ↑](#1-campaign)
 
 ### 2.2.2. Fetch campaigns
 
@@ -405,6 +412,7 @@ Endpoint: https://onqcms.com/api/campaign/fetch
     }
 ]
 ```
+
 #### 2.2.2.2. Fetch a campaign with sub divisions (campaigns)
 `Request:`
 ```
@@ -479,6 +487,8 @@ Endpoint: https://onqcms.com/api/campaign/fetch
   "error": "Campaign not found"
 }
 ```
+[Top ↑](#1-campaign)
+
 ### 2.2.3. Update a campaign by ID
 
 Endpoint: https://onqcms.com/api/campaign/edit
@@ -565,6 +575,8 @@ To remove start_data, start_time, end_date and end_time values, set empty value 
 }
 ```
 
+[Top ↑](#1-campaign)
+
 ### 2.2.4. Delete single or multiple  campaigns
 
 Endpoint: https://onqcms.com/api/campaign/delete
@@ -589,7 +601,7 @@ Endpoint: https://onqcms.com/api/campaign/delete
   "error": "Campaign not found"
 }
 ```
-
+[Top ↑](#1-campaign)
 ### 2.2.5. Campaign Availability
 This endpoint returns availability sorted by date and players. If any campaign division overlaps with the specified date-time range, the main campaign is selected and counted.
 
@@ -670,3 +682,6 @@ Endpoint: https://onqcms.com/api/campaign/availability
     ...
 }
 ```
+[Top ↑](#1-campaign)
+
+[Back to Home](README.md)

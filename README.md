@@ -26,3 +26,4 @@ Requests to the OnQ CMS must be authenticated with a valid token generated in **
 - [Player](player.md)
 - [Playlist](playlist.md)
 - [Report](report.md)
+- [Campaign](campaign.md)
