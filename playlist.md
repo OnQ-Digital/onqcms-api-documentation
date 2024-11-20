@@ -18,6 +18,8 @@ The CMS expects an array of playlist objects as the input.
 | Parameter | Type                          | Required | Description |
 |-----------|-------------------------------|----------|-------------|
 | players   | array (strings - player IDs)  | True     | The media players to be assigned to the playlist |
+| playlist_width | integer	|	True | Playlist Width |
+| playlist_height | integer	|	True | Playlist Height |
 | playlist  | array (playlist asset object) | True     | A list of assets to playback. See below table for parameters. Assets will play back in the order that they are in the array, restarting playback from the start once the end of the playlist is reached.
 
 ### Playlist Asset JSON Object
@@ -64,6 +66,8 @@ The CMS expects an array of playlist objects as the input.
 curl -H "Authorization: bearer demo123" -X POST -d '[
 	{
 		"players":["demo123"],
+		"playlist_width": 1920,
+		"playlist_height": 1080,
 		"playlist":[
 			{
 				"file":{
