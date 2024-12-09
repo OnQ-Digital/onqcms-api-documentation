@@ -1,36 +1,54 @@
-# 1. Campaign
+# Campaign
 
-The onQ CMS API allows users to create, edit and delete campaign.<br>
-At the moment, this API is for **internal use only** (Authentication: Session-Based Authentication is used.)<br>
-*API authentication need to be implemented on every endpoint.*
+The onQ CMS API allows users to create, edit and delete campaign.<br><br>
+At the moment, **1. Campaign Type & 2. Campaign Management** are for **internal use only** (Authentication: Session-Based Authentication is used.)<br>
+3, 4 & 5 are for both API key and Session-based Authentication.<br> 
 
-# 2. TOC
-- [1. Campaign](#1-campaign)
-- [2. TOC](#2-toc)
-  - [2.1. Campaign Type](#21-campaign-type)
-    - [2.1.1. Create a new campaign type](#211-create-a-new-campaign-type)
-    - [2.1.2. Fetch campaigns type by ID OR All](#212-fetch-campaigns-type-by-id-or-all)
-      - [2.1.2.1. List All Campaign](#2121-list-all-campaign)
-      - [2.1.2.2. Fetch a campaign type by ID](#2122-fetch-a-campaign-type-by-id)
-    - [2.1.3. Update a campaign type by ID](#213-update-a-campaign-type-by-id)
-    - [2.1.4. Delete single or multiple campaign types](#214-delete-single-or-multiple-campaign-types)
-  - [2.2. Campaign Management](#22-campaign-management)
-      - [Endpoints Overviews](#endpoints-overviews)
-    - [2.2.1. Create a new campaign](#221-create-a-new-campaign)
-    - [2.2.2. Fetch campaigns](#222-fetch-campaigns)
-      - [2.2.2.1. Fetch all campaign by group](#2221-fetch-all-campaign-by-group)
-      - [2.2.2.2. Fetch a campaign with sub divisions (campaigns)](#2222-fetch-a-campaign-with-sub-divisions-campaigns)
-    - [2.2.3. Update a campaign by ID](#223-update-a-campaign-by-id)
-    - [2.2.4. Delete single or multiple  campaigns](#224-delete-single-or-multiple--campaigns)
-    - [2.2.5. Campaign Availability](#225-campaign-availability)
+
+# TOC
+- [Campaign](#campaign)
+- [TOC](#toc)
+- [1. Campaign Type](#1-campaign-type)
+  - [1.1. Create a new campaign type](#11-create-a-new-campaign-type)
+  - [1.2. Fetch campaigns type by ID OR All](#12-fetch-campaigns-type-by-id-or-all)
+    - [1.2.1. List All Campaign](#121-list-all-campaign)
+    - [1.2.2. Fetch a campaign type by ID](#122-fetch-a-campaign-type-by-id)
+  - [1.3. Update a campaign type by ID](#13-update-a-campaign-type-by-id)
+  - [1.4. Delete single or multiple campaign types](#14-delete-single-or-multiple-campaign-types)
+- [2. Campaign Management](#2-campaign-management)
+    - [Endpoints Overviews](#endpoints-overviews)
+  - [2.1. Create a new campaign](#21-create-a-new-campaign)
+  - [2.2. Fetch campaigns](#22-fetch-campaigns)
+    - [2.2.1. Fetch all campaign by group](#221-fetch-all-campaign-by-group)
+    - [2.2.2. Fetch a campaign with sub divisions (campaigns)](#222-fetch-a-campaign-with-sub-divisions-campaigns)
+  - [2.3. Update a campaign by ID](#23-update-a-campaign-by-id)
+  - [2.4. Delete single or multiple  campaigns](#24-delete-single-or-multiple--campaigns)
+  - [2.5. Campaign Availability](#25-campaign-availability)
+- [3. Category](#3-category)
+  - [3.1. Fetch Category](#31-fetch-category)
+  - [3.2. Create a new category](#32-create-a-new-category)
+  - [3.3. Edit category](#33-edit-category)
+  - [3.4. Delete Category](#34-delete-category)
+- [4. Tag](#4-tag)
+  - [4.1. Fetch Tag](#41-fetch-tag)
+  - [4.2. Create a new Tag](#42-create-a-new-tag)
+  - [4.3. Edit Tag](#43-edit-tag)
+  - [4.4. Delete Tag](#44-delete-tag)
+- [5. Smart Group](#5-smart-group)
+  - [5.1. Fetch Smart Group](#51-fetch-smart-group)
+  - [5.2. Create a new Smart Group](#52-create-a-new-smart-group)
+  - [5.3. Edit Smart Group](#53-edit-smart-group)
+  - [5.4. Delete Smart Group](#54-delete-smart-group)
+
+
 
 [Back to Home](README.md)
 
-## 2.1. Campaign Type
+# 1. Campaign Type
 Base URL: https://onqcms.com/api/campaign/type
 
 
-### 2.1.1. Create a new campaign type
+## 1.1. Create a new campaign type
 Endpoint: https://onqcms.com/api/campaign/type/create
 
 **Request Parameters**
@@ -106,13 +124,13 @@ The CMS expects an array of template structure objects as the input
 }
 ```
 
-[Top ↑](#1-campaign)
+[Top ↑](#campaign)
 
 
-### 2.1.2. Fetch campaigns type by ID OR All
+## 1.2. Fetch campaigns type by ID OR All
 Endpoint: https://onqcms.com/api/campaign/type/fetch	
 
-#### 2.1.2.1. List All Campaign
+### 1.2.1. List All Campaign
 
 `Request:`
 
@@ -147,7 +165,7 @@ Endpoint: https://onqcms.com/api/campaign/type/fetch
 ]
 ```
 
-#### 2.1.2.2. Fetch a campaign type by ID
+### 1.2.2. Fetch a campaign type by ID
 
 `Request:`
 
@@ -176,9 +194,9 @@ Endpoint: https://onqcms.com/api/campaign/type/fetch
   "error": "Campaign type not found"
 }
 ```
-[Top ↑](#1-campaign)
+[Top ↑](#campaign)
 
-### 2.1.3. Update a campaign type by ID
+## 1.3. Update a campaign type by ID
 Endpoint: https://onqcms.com/api/campaign/type/edit	
 
 `Request:`
@@ -210,9 +228,9 @@ Endpoint: https://onqcms.com/api/campaign/type/edit
   "error": "Campaign type not found"
 }
 ```
-[Top ↑](#1-campaign)
+[Top ↑](#campaign)
 
-### 2.1.4. Delete single or multiple campaign types
+## 1.4. Delete single or multiple campaign types
 Endpoint: https://onqcms.com/api/campaign/type/delete	
 
 `Request:`
@@ -237,14 +255,14 @@ Endpoint: https://onqcms.com/api/campaign/type/delete
 }
 ```
 
-[Top ↑](#1-campaign)
+[Top ↑](#campaign)
 
 
 
-## 2.2. Campaign Management
+# 2. Campaign Management
 Base URL: https://onqcms.com/api/campaign
 
-#### Endpoints Overviews
+### Endpoints Overviews
 We have adopted the CRUD method but we do only use POST method with different endpoints
 | Method | Endpoint | Description |
 |---------|---------------------------|------------------------------|
@@ -255,7 +273,7 @@ We have adopted the CRUD method but we do only use POST method with different en
 | POST  | /campaign/availability   |  Fetching Campaign Availability by Date and Players  |
 
 
-### 2.2.1. Create a new campaign
+## 2.1. Create a new campaign
 
 Endpoint: https://onqcms.com/api/campaign/create
 
@@ -349,9 +367,9 @@ Endpoint: https://onqcms.com/api/campaign/create
   "error": "Invalid input data"
 }
 ```
-[Top ↑](#1-campaign)
+[Top ↑](#campaign)
 
-### 2.2.2. Fetch campaigns
+## 2.2. Fetch campaigns
 
 Endpoint: https://onqcms.com/api/campaign/fetch
 
@@ -369,7 +387,7 @@ Endpoint: https://onqcms.com/api/campaign/fetch
 | mediaplayer_ids     | array     | True      | Player ID, [] for all     |
 | by_group            | integer   | True      | 1 for by group, 0 for division |
 
-#### 2.2.2.1. Fetch all campaign by group
+### 2.2.1. Fetch all campaign by group
 `Request:`
 ```json
 {
@@ -419,7 +437,7 @@ Endpoint: https://onqcms.com/api/campaign/fetch
 ]
 ```
 
-#### 2.2.2.2. Fetch a campaign with sub divisions (campaigns)
+### 2.2.2. Fetch a campaign with sub divisions (campaigns)
 `Request:`
 ```json
 {
@@ -493,9 +511,9 @@ Endpoint: https://onqcms.com/api/campaign/fetch
   "error": "Campaign not found"
 }
 ```
-[Top ↑](#1-campaign)
+[Top ↑](#campaign)
 
-### 2.2.3. Update a campaign by ID
+## 2.3. Update a campaign by ID
 
 Endpoint: https://onqcms.com/api/campaign/edit
 
@@ -511,7 +529,6 @@ Endpoint: https://onqcms.com/api/campaign/edit
 | color_hex           | string            | True     | Campaign color code       |
 | campaign_sub        | array (campaign object) | True | List of campaign object  |
 
----
 
 *Campaign_sub Parameters*
 | Parameter           | Type              | Required  | Description               |
@@ -581,9 +598,9 @@ To remove start_data, start_time, end_date and end_time values, set empty value 
 }
 ```
 
-[Top ↑](#1-campaign)
+[Top ↑](#campaign)
 
-### 2.2.4. Delete single or multiple  campaigns
+## 2.4. Delete single or multiple  campaigns
 
 Endpoint: https://onqcms.com/api/campaign/delete
 
@@ -607,8 +624,8 @@ Endpoint: https://onqcms.com/api/campaign/delete
   "error": "Campaign not found"
 }
 ```
-[Top ↑](#1-campaign)
-### 2.2.5. Campaign Availability
+[Top ↑](#campaign)
+## 2.5. Campaign Availability
 This endpoint returns availability sorted by date and players. If any campaign division overlaps with the specified date-time range, the main campaign is selected and counted.
 
 Endpoint: https://onqcms.com/api/campaign/availability
@@ -688,6 +705,487 @@ Endpoint: https://onqcms.com/api/campaign/availability
     ...
 }
 ```
-[Top ↑](#1-campaign)
+[Top ↑](#campaign)
+
+# 3. Category
+
+Base URL: https://onqcms.com/api/smart_category
+
+## 3.1. Fetch Category
+
+Endpoint: https://onqcms.com/api/smart_category/fetch
+
+**Request Parameters**
+
+The CMS expects an array of template structure objects as the input
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| category_id         | integer           | False      | Category ID              |
+| object_type         | string            | False      | 'player', 'playlist', 'asset', 'campaign' |
+
+`Example request:`
+
+```json
+{
+    "category_id": 7,
+    "object_type": "player"
+}
+
+---
+
+{
+    "category_id": 7
+}
+
+---
+
+{
+}
+```
+[Top ↑](#campaign)
+
+
+## 3.2. Create a new category
+
+Endpoint: https://onqcms.com/api/smart_category/create
+
+**Request Parameters**
+
+The CMS expects an array of template structure objects as the input
+
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| category_key        | string            | True      | Category key name         |
+| category_value      | string            | True      | Category key's value      |
+| object_type         | string            | True      | 'player', 'playlist', 'asset', 'campaign' |
+| object_id           | integer           | True      | array of integers or strings |
+
+
+`Example request:`
+
+```json
+{
+    "category_key":"Client",
+    "category_value":"DJ-2",
+    "object_type":"campaign",
+    "object_id":[111,222,333]
+}
+
+--
+
+{
+    "category_key":"Brand",
+    "category_value":"Hugo Boss",
+    "object_type":"player",
+    "object_id":["testaaa001","testaaa002","offset-test1"]
+}
+
+-- 
+
+{
+    "category_key":"Brand",
+    "category_value":"Hugo Boss",
+    "object_type":"playlist",
+    "object_id":["testaaa001","testaaa002","offset-test1"]
+}
+
+--
+
+{
+    "category_key":"Brand",
+    "category_value":"Hugo Boss",
+    "object_type":"asset",
+    "object_id":["testaaa001","testaaa002","offset-test1"]
+}
+
+```
+
+`Success Response:`
+
+```json
+{
+  "category_id":162
+}
+
+```
+[Top ↑](#campaign)
+
+## 3.3. Edit category
+
+Endpoint: https://onqcms.com/api/smart_category/create
+
+**Request Parameters**
+
+The CMS expects an array of template structure objects as the input
+
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| category_key        | string            | True      | Category key name         |
+| category_value      | string            | True      | Category key's value      |
+| object_type         | string            | True      | 'player', 'playlist', 'asset', 'campaign' |
+| object_id           | integer           | True      | array of integers or strings |
+
+
+`Example request:`
+
+```json
+{
+    "category_key":"Client",
+    "category_value":"DJ-2",
+    "object_type":"campaign",
+    "object_id":[111,222,333]
+}
+
+--
+
+{
+    "category_key":"Brand",
+    "category_value":"Hugo Boss",
+    "object_type":"player",
+    "object_id":["testaaa001","testaaa002","offset-test1"]
+}
+
+-- 
+
+{
+    "category_key":"Brand",
+    "category_value":"Hugo Boss",
+    "object_type":"playlist",
+    "object_id":["testaaa001","testaaa002","offset-test1"]
+}
+
+--
+
+{
+    "category_key":"Brand",
+    "category_value":"Hugo Boss",
+    "object_type":"asset",
+    "object_id":["testaaa001","testaaa002","offset-test1"]
+}
+
+```
+
+`Success Response:`
+
+```json
+{
+..
+}
+
+```
+## 3.4. Delete Category
+
+Endpoint: https://onqcms.com/api/smart_category/delete
+
+
+**Request Parameters**
+
+The CMS expects an array of category structure objects as the input
+
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| category_id         | integer           | True      | Category ID               |
+| object_type         | string            | True      | 'player', 'playlist', 'asset', 'campaign' |
+
+`Example request:`
+
+```json
+{
+..
+}
+
+```
+[Top ↑](#campaign)
+
+# 4. Tag
+Base URL: https://onqcms.com/api/smart_tag
+
+## 4.1. Fetch Tag
+Endpoint: https://onqcms.com/api/smart_tag/fetch
+
+**Request Parameters**
+
+The CMS expects an array of tag structure objects as the input
+
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| tag_id              | integer           | False     | Tag ID              |
+| object_type         | string            | False     | 'player', 'playlist', 'asset', 'campaign' |
+
+`Example request:`
+
+```json
+{
+    "tag_id": 7,
+    "object_type": "player"
+}
+
+---
+
+{
+    "tag_id": 7
+}
+
+---
+
+{
+}
+```
+[Top ↑](#campaign)
+
+## 4.2. Create a new Tag
+Endpoint: https://onqcms.com/api/smart_tag/create
+
+**Request Parameters**
+
+The CMS expects an array of tag structure objects as the input
+
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| tag_name            | string            | True      | Tag name         |
+| object_type         | string            | True      | 'player', 'playlist', 'asset', 'campaign' |
+| object_id           | Array             | True      | array of strings          |
+
+
+`Example request:`
+
+```json
+{
+    "tag_name":"Hugo",
+    "object_type":"player",
+    "object_id":["testaaa001","testaaa002","offset-test1"]
+}
+
+---
+
+{
+    "tag_name":"Hugo",
+    "object_type":"playlist",
+    "object_id":["testaaa001","testaaa002","offset-test1"]
+}
+
+---
+
+{
+    "tag_name":"Hugo",
+    "object_type":"asset",
+    "object_id":["testaaa001","testaaa002","offset-test1"]
+}
+```
+
+`Success Response:`
+
+```json
+{
+  "tag_id":5
+}
+
+```
+[Top ↑](#campaign)
+
+## 4.3. Edit Tag
+Endpoint: https://onqcms.com/api/smart_tag/create
+
+This is to edit tag allocation
+
+**Request Parameters**
+
+The CMS expects an array of tag structure objects as the input
+
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| tag_id              | integer           | True      | Tag name                  |
+| object_type         | string            | True      | 'player', 'playlist', 'asset', 'campaign' |
+| object_id           | array             | True      | array of integers or strings |
+
+
+`Example request:`
+
+```json
+{
+    "tag_id":7,
+    "object_type":"player",
+    "object_id":["testaaa001","testaaa002","test12"]
+}
+
+```
+
+`Success Response:`
+
+```json
+{
+}
+
+```
+## 4.4. Delete Tag
+Endpoint: https://onqcms.com/api/smart_tag/delete
+
+**Request Parameters**
+
+The CMS expects an array of tag structure objects as the input
+
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| category_id         | integer           | True      | Category ID               |
+| object_type         | string            | True      | 'player', 'playlist', 'asset', 'campaign' |
+
+`Example request:`
+
+```json
+{
+    "tag_id": 7,
+    "object_type": "player"
+}
+
+```
+[Top ↑](#campaign)
+
+
+# 5. Smart Group
+
+Base URL: https://onqcms.com/api/smart_group
+
+- This is smart playlst / Campaign group use. Do not confuse Comapny Group.
+
+## 5.1. Fetch Smart Group
+
+Endpoint: https://onqcms.com/api/smart_group/fetch
+
+**Request Parameters**
+
+The CMS expects an array of smart group structure objects as the input
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| smart_group_id      | integer           | False     | smart group ID              |
+| object_type         | string            | False     | 'player', 'playlist', 'asset', 'campaign' |
+
+`Example request:`
+
+```json
+{
+    "smart_group_id":7,
+    "object_type":"player"
+}
+
+---
+
+{
+    "smart_group_id":[]
+}
+
+---
+
+{
+}
+```
+[Top ↑](#campaign)
+
+## 5.2. Create a new Smart Group
+
+Endpoint: https://onqcms.com/api/smart_group/create
+
+**Request Parameters**
+
+The CMS expects an array of smart group structure objects as the input
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| smart_group_id      | string            | True      | smart group name         |
+| object_type         | string            | True      | 'player', 'playlist', 'asset', 'campaign' |
+| object_id           | Array             | True      | array of strings          |
+
+
+`Example request:`
+
+```json
+{
+    "group_name":"Hugo",
+    "object_type":"player",
+    "object_id":["testaaa001","testaaa002","offset-test1"]
+}
+
+---
+
+{
+    "group_name":"Hugo",
+    "object_type":"playlist",
+    "object_id":["testaaa001","testaaa002","offset-test1"]
+}
+
+---
+
+{
+    "group_name":"Hugo",
+    "object_type":"asset",
+    "object_id":["testaaa001","testaaa002","offset-test1"]
+}
+```
+
+`Success Response:`
+
+```json
+{
+  "tag_id":5
+}
+
+```
+[Top ↑](#campaign)
+
+## 5.3. Edit Smart Group
+
+Endpoint: https://onqcms.com/api/smart_group/create
+
+This is to edit tag allocation
+
+**Request Parameters**
+
+The CMS expects an array of smart group structure objects as the input
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| smart_group_id      | integer           | True      | smart group name          |
+| object_type         | string            | True      | 'player', 'playlist', 'asset', 'campaign' |
+| object_id           | array             | True      | array of integers or strings |
+
+
+`Example request:`
+
+```json
+{
+    "smart_group_id":7,
+    "object_type":"player",
+    "object_id":["testaaa001","testaaa002","test12"]
+}
+
+```
+
+`Success Response:`
+
+```json
+{
+}
+
+```
+## 5.4. Delete Smart Group
+
+Endpoint: https://onqcms.com/api/smart_group/delete
+
+**Request Parameters**
+
+The CMS expects an array of smart group structure objects as the input
+
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| smart_group_id      | integer           | True      | smart group ID               |
+| object_type         | string            | True      | 'player', 'playlist', 'asset', 'campaign' |
+
+`Example request:`
+
+```json
+{
+    "tag_id": 7,
+    "object_type": "player"
+}
+
+```
+[Top ↑](#campaign)
 
 [Back to Home](README.md)
