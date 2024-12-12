@@ -914,7 +914,9 @@ The CMS expects an array of tag structure objects as the input
 | Parameter           | Type              | Required  | Description               |
 |---------------------|-------------------|-----------|---------------------------|
 | tag_id              | integer           | False     | Tag ID              |
+| tag_name            | string            | False     | Tag name
 | object_type         | string            | False     | 'player', 'playlist', 'asset', 'campaign' |
+|object_id            | integer           | False     | Object Id
 
 `Example request:`
 
@@ -1046,6 +1048,9 @@ The CMS expects an array of tag structure objects as the input
 
 
 # 5. Smart Group
+
+*Note: We do not use Group for now*
+***
 
 Base URL: https://onqcms.com/api/smart_group
 
