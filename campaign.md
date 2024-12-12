@@ -385,7 +385,7 @@ Endpoint: https://onqcms.com/api/campaign/fetch
 | max_booking         | integer   | True      | (not used yet)            |
 | campaign_statuses   | array     | True      | Status requirement        |
 | mediaplayer_ids     | array     | True      | Player ID, [] for all     |
-| by_group            | integer   | True      | 1 for by group, 0 for division |
+| by_group            | integer   | True      | 1 for by group, 0 for division, 2 for details |
 
 ### 2.2.1. Fetch all campaign by group
 `Request:`
@@ -607,7 +607,8 @@ Endpoint: https://onqcms.com/api/campaign/delete
 `Request:`
 ```json
 {
-  "campaign_id": 12
+  "campaign_id": 12,
+  "company_group_id": 3
 }
 ```
 `Response:`
@@ -721,7 +722,10 @@ The CMS expects an array of template structure objects as the input
 | Parameter           | Type              | Required  | Description               |
 |---------------------|-------------------|-----------|---------------------------|
 | category_id         | integer           | False      | Category ID              |
+| category_key        | string            | False     | Category key              |
+| category_val        | string            | False     | Category Value              |
 | object_type         | string            | False      | 'player', 'playlist', 'asset', 'campaign' |
+| object_id           | integer           | False     | Object ID              |
 
 `Example request:`
 
