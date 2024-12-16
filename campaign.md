@@ -21,6 +21,7 @@ At the moment, **1. Campaign Type & 2. Campaign Management** are for **internal 
   - [2.2. Fetch campaigns](#22-fetch-campaigns)
     - [2.2.1. Fetch all campaign by group](#221-fetch-all-campaign-by-group)
     - [2.2.2. Fetch a campaign with sub divisions (campaigns)](#222-fetch-a-campaign-with-sub-divisions-campaigns)
+    - [2.2.3. Fetch a campaign detail with campaign ID](#223-fetch-a-campaign-detail-with-campaign-id)
   - [2.3. Update a campaign by ID](#23-update-a-campaign-by-id)
   - [2.4. Delete single or multiple  campaigns](#24-delete-single-or-multiple--campaigns)
   - [2.5. Campaign Availability](#25-campaign-availability)
@@ -499,6 +500,80 @@ Endpoint: https://onqcms.com/api/campaign/fetch
         "total_assignments": 5,
         "createdAt": "2024-10-31 14:57:53",
         "updatedAt": "2024-10-31 14:57:53"
+    }
+]
+```
+
+### 2.2.3. Fetch a campaign detail with campaign ID
+`Request:`
+```json
+{
+    "company_group_id": 3,
+    "campaign_id": 49,
+    "start_date_time": "2024-01-02 00:00:00",
+    "end_date_time": "2024-12-02 23:59:59",
+    "min_booking": null,
+    "max_booking": null,
+    "campaign_statuses": ["live","finished"],
+    "mediaplayer_ids": [36],
+    "by_group": 0
+}
+```
+`Success Response:`
+
+- Status: 200 OK
+```json
+[
+    {
+        "campaign_id": 171,
+        "campaign_name": "DJ Campaign 1",
+        "asset_folder_id": 503,
+        "color_hex": "#aadd33",
+        "campaign_sub_id": 76,
+        "campaign_sub_name": "dj division 1",
+        "campaign_sub_order": 1,
+        "playlist_content": "[33361, 33362, 33363, 33369, 33370, 33371, 33374, 33375, 33376]",
+        "start_date_time": "2024-10-01 09:00:00",
+        "end_date_time": "2024-10-30 18:00:00",
+        "created_at": "2024-12-12 09:41:57",
+        "updated_at": "2024-12-12 09:41:57",
+        "mediaplayer_ids": [
+            1144,
+            1153
+        ],
+        "tag_campaign_ids": [],
+        "category_campaign_ids": [
+            162
+        ],
+        "category_client_ids": [
+            162
+        ]
+    },
+    {
+        "campaign_id": 171,
+        "campaign_name": "DJ Campaign 1",
+        "asset_folder_id": 503,
+        "color_hex": "#aadd33",
+        "campaign_sub_id": 77,
+        "campaign_sub_name": "dj division 2",
+        "campaign_sub_order": 2,
+        "playlist_content": "[56260, 56261, 56262, 56263]",
+        "start_date_time": null,
+        "end_date_time": null,
+        "created_at": "2024-12-12 09:41:57",
+        "updated_at": "2024-12-12 09:41:57",
+        "mediaplayer_ids": [
+            1413,
+            1438,
+            1439
+        ],
+        "tag_campaign_ids": [],
+        "category_campaign_ids": [
+            162
+        ],
+        "category_client_ids": [
+            162
+        ]
     }
 ]
 ```
