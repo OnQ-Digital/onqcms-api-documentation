@@ -21,6 +21,7 @@ At the moment, **1. Campaign Type & 2. Campaign Management** are for **internal 
   - [2.2. Fetch campaigns](#22-fetch-campaigns)
     - [2.2.1. Fetch all campaign by group](#221-fetch-all-campaign-by-group)
     - [2.2.2. Fetch a campaign with sub divisions (campaigns)](#222-fetch-a-campaign-with-sub-divisions-campaigns)
+    - [2.2.3. Fetch a campaign detail with campaign ID](#223-fetch-a-campaign-detail-with-campaign-id)
   - [2.3. Update a campaign by ID](#23-update-a-campaign-by-id)
   - [2.4. Delete single or multiple  campaigns](#24-delete-single-or-multiple--campaigns)
   - [2.5. Campaign Availability](#25-campaign-availability)
@@ -385,7 +386,7 @@ Endpoint: https://onqcms.com/api/campaign/fetch
 | max_booking         | integer   | True      | (not used yet)            |
 | campaign_statuses   | array     | True      | Status requirement        |
 | mediaplayer_ids     | array     | True      | Player ID, [] for all     |
-| by_group            | integer   | True      | 1 for by group, 0 for division |
+| by_group            | integer   | True      | 1 for by group, 0 for division, 2 for details |
 
 ### 2.2.1. Fetch all campaign by group
 `Request:`
@@ -503,6 +504,80 @@ Endpoint: https://onqcms.com/api/campaign/fetch
 ]
 ```
 
+### 2.2.3. Fetch a campaign detail with campaign ID
+`Request:`
+```json
+{
+    "company_group_id": 3,
+    "campaign_id": 49,
+    "start_date_time": "2024-01-02 00:00:00",
+    "end_date_time": "2024-12-02 23:59:59",
+    "min_booking": null,
+    "max_booking": null,
+    "campaign_statuses": ["live","finished"],
+    "mediaplayer_ids": [36],
+    "by_group": 0
+}
+```
+`Success Response:`
+
+- Status: 200 OK
+```json
+[
+    {
+        "campaign_id": 171,
+        "campaign_name": "DJ Campaign 1",
+        "asset_folder_id": 503,
+        "color_hex": "#aadd33",
+        "campaign_sub_id": 76,
+        "campaign_sub_name": "dj division 1",
+        "campaign_sub_order": 1,
+        "playlist_content": "[33361, 33362, 33363, 33369, 33370, 33371, 33374, 33375, 33376]",
+        "start_date_time": "2024-10-01 09:00:00",
+        "end_date_time": "2024-10-30 18:00:00",
+        "created_at": "2024-12-12 09:41:57",
+        "updated_at": "2024-12-12 09:41:57",
+        "mediaplayer_ids": [
+            1144,
+            1153
+        ],
+        "tag_campaign_ids": [],
+        "category_campaign_ids": [
+            162
+        ],
+        "category_client_ids": [
+            162
+        ]
+    },
+    {
+        "campaign_id": 171,
+        "campaign_name": "DJ Campaign 1",
+        "asset_folder_id": 503,
+        "color_hex": "#aadd33",
+        "campaign_sub_id": 77,
+        "campaign_sub_name": "dj division 2",
+        "campaign_sub_order": 2,
+        "playlist_content": "[56260, 56261, 56262, 56263]",
+        "start_date_time": null,
+        "end_date_time": null,
+        "created_at": "2024-12-12 09:41:57",
+        "updated_at": "2024-12-12 09:41:57",
+        "mediaplayer_ids": [
+            1413,
+            1438,
+            1439
+        ],
+        "tag_campaign_ids": [],
+        "category_campaign_ids": [
+            162
+        ],
+        "category_client_ids": [
+            162
+        ]
+    }
+]
+```
+
 `Error Response:`
 
 - Status: 404 Not Found
@@ -607,7 +682,8 @@ Endpoint: https://onqcms.com/api/campaign/delete
 `Request:`
 ```json
 {
-  "campaign_id": 12
+  "campaign_id": 12,
+  "company_group_id": 3
 }
 ```
 `Response:`
@@ -721,7 +797,10 @@ The CMS expects an array of template structure objects as the input
 | Parameter           | Type              | Required  | Description               |
 |---------------------|-------------------|-----------|---------------------------|
 | category_id         | integer           | False      | Category ID              |
+| category_key        | string            | False     | Category key              |
+| category_val        | string            | False     | Category Value              |
 | object_type         | string            | False      | 'player', 'playlist', 'asset', 'campaign' |
+| object_id           | integer           | False     | Object ID              |
 
 `Example request:`
 
@@ -910,7 +989,9 @@ The CMS expects an array of tag structure objects as the input
 | Parameter           | Type              | Required  | Description               |
 |---------------------|-------------------|-----------|---------------------------|
 | tag_id              | integer           | False     | Tag ID              |
+| tag_name            | string            | False     | Tag name
 | object_type         | string            | False     | 'player', 'playlist', 'asset', 'campaign' |
+|object_id            | integer           | False     | Object Id
 
 `Example request:`
 
@@ -1042,6 +1123,9 @@ The CMS expects an array of tag structure objects as the input
 
 
 # 5. Smart Group
+
+*Note: We do not use Group for now*
+***
 
 Base URL: https://onqcms.com/api/smart_group
 
