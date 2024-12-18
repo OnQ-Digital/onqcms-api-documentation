@@ -299,8 +299,8 @@ Endpoint: https://onqcms.com/api/campaign/create
 | end_date_time       | datetime          | False     | validity end date time    |
 | content             | array             | True      | content ID in order       |
 | mediaplayer_id      | array             | False     | assigned media player ID  |
-| category_id         | array             | False     | Player Category ID        |
-| tag_id              | array             | False     | Player Tag ID             |
+| mediaplayer_category_id | array             | False     | Player Category ID        |
+| mediaplayer_tag_id      | array             | False     | Player Tag ID             |
 
 `Request:`
 ```json
@@ -316,7 +316,9 @@ Endpoint: https://onqcms.com/api/campaign/create
       "start_date_time": "2024-10-01 09:00:00",
       "end_date_time": "2024-10-30 18:00:00",
       "content": [33361, 33362, 33363, 33369, 33370, 33371, 33374, 33375, 33376],
-      "mediaplayer_ids": [1144, 1153]
+      "mediaplayer_ids": [1144, 1153],
+      "mediaplayer_category_id": [123, 111],
+      "mediaplayer_tag_id": [222,333]
     },
     {
       "order": 2,
@@ -324,7 +326,9 @@ Endpoint: https://onqcms.com/api/campaign/create
       "start_date_time": "2024-10-02 13:00:00",
       "end_date_time": "2024-11-30 20:00:00",
       "content": [56260, 56261, 56262, 56263],
-      "mediaplayer_ids": [1415, 1416, 1417]
+      "mediaplayer_ids": [1415, 1416, 1417],
+      "mediaplayer_category_id": [123, 111],
+      "mediaplayer_tag_id": [222,333]
     }
   ]
 }
@@ -543,11 +547,11 @@ Endpoint: https://onqcms.com/api/campaign/fetch
             1144,
             1153
         ],
-        "mediaplayer_category": [
+        "mediaplayer_category_id": [
           111,
           222
         ],
-        "mediaplayer_tag": [
+        "mediaplayer_tag_id": [
           123,
           345
         ],
@@ -577,11 +581,11 @@ Endpoint: https://onqcms.com/api/campaign/fetch
             1438,
             1439
         ],
-        "mediaplayer_category": [
+        "mediaplayer_category_id": [
           111,
           222
         ],
-        "mediaplayer_tag": [
+        "mediaplayer_tag_id": [
           123,
           345
         ],
