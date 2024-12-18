@@ -299,6 +299,8 @@ Endpoint: https://onqcms.com/api/campaign/create
 | end_date_time       | datetime          | False     | validity end date time    |
 | content             | array             | True      | content ID in order       |
 | mediaplayer_id      | array             | False     | assigned media player ID  |
+| category_id         | array             | False     | Player Category ID        |
+| tag_id              | array             | False     | Player Tag ID             |
 
 `Request:`
 ```json
@@ -541,6 +543,14 @@ Endpoint: https://onqcms.com/api/campaign/fetch
             1144,
             1153
         ],
+        "mediaplayer_category": [
+          111,
+          222
+        ],
+        "mediaplayer_tag": [
+          123,
+          345
+        ],
         "tag_campaign_ids": [],
         "category_campaign_ids": [
             162
@@ -566,6 +576,14 @@ Endpoint: https://onqcms.com/api/campaign/fetch
             1413,
             1438,
             1439
+        ],
+        "mediaplayer_category": [
+          111,
+          222
+        ],
+        "mediaplayer_tag": [
+          123,
+          345
         ],
         "tag_campaign_ids": [],
         "category_campaign_ids": [
