@@ -424,6 +424,9 @@ Endpoint: https://onqcms.com/api/campaign/fetch
         "end_date_time": null,
         "status": "live",
         "total_assignments": 1,
+        "tag_campaign_ids": [],
+        "category_client_ids": [111],
+        "category_client_name": null
         "createdAt": "2024-11-08 12:10:09",
         "updatedAt": "2024-11-08 12:10:09"
     },
@@ -438,6 +441,9 @@ Endpoint: https://onqcms.com/api/campaign/fetch
         "end_date_time": "2024-11-08 00:00:00",
         "status": "finished",
         "total_assignments": 0,
+        "tag_campaign_ids": [],
+        "category_client_ids": [112],
+        "category_client_name": "gucci",
         "createdAt": "2024-11-08 12:10:09",
         "updatedAt": "2024-11-08 12:10:09"
     }
