@@ -424,6 +424,9 @@ Endpoint: https://onqcms.com/api/campaign/fetch
         "end_date_time": null,
         "status": "live",
         "total_assignments": 1,
+        "tag_campaign_ids": [],
+        "category_client_ids": [111],
+        "category_client_name": null
         "createdAt": "2024-11-08 12:10:09",
         "updatedAt": "2024-11-08 12:10:09"
     },
@@ -438,6 +441,9 @@ Endpoint: https://onqcms.com/api/campaign/fetch
         "end_date_time": "2024-11-08 00:00:00",
         "status": "finished",
         "total_assignments": 0,
+        "tag_campaign_ids": [],
+        "category_client_ids": [112],
+        "category_client_name": "gucci",
         "createdAt": "2024-11-08 12:10:09",
         "updatedAt": "2024-11-08 12:10:09"
     }
@@ -655,7 +661,12 @@ To remove start_data, start_time, end_date and end_time values, set empty value 
       "start_date_time": "2024-10-01 09:00:00",
       "end_date_time": "2024-10-30 18:00:00",
       "content": [33361, 33362, 33363, 33369, 33370, 33371, 33374, 33375, 33376],
-      "mediaplayer_ids": [1144, 1153]
+      "mediaplayer_ids": [1144, 1153],
+      "mediaplayer_category_id": [111,222],
+      "mediaplayer_tag_id": [123,345],
+      "tag_campaign_ids": [],
+      "category_campaign_ids": [152],
+      "category_client_ids": [162]
     },
     {
       "order": 2,
@@ -663,7 +674,12 @@ To remove start_data, start_time, end_date and end_time values, set empty value 
       "start_date_time": "2024-10-02 13:00:00",
       "end_date_time": "2024-11-30 20:00:00",
       "content": [56260, 56261, 56262, 56263],
-      "mediaplayer_ids": [1415, 1416, 1417]
+      "mediaplayer_ids": [1415, 1416, 1417],
+      "mediaplayer_category_id": [111,222],
+      "mediaplayer_tag_id": [123,345],
+      "tag_campaign_ids": [],
+      "category_campaign_ids": [162],
+      "category_client_ids": [162]
     }
   ]
 }
