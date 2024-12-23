@@ -553,11 +553,11 @@ Endpoint: https://onqcms.com/api/campaign/fetch
             1144,
             1153
         ],
-        "mediaplayer_category_id": [
+        "mediaplayer_cat_ids": [
           111,
           222
         ],
-        "mediaplayer_tag_id": [
+        "mediaplayer_tag_ids": [
           123,
           345
         ],
@@ -587,11 +587,11 @@ Endpoint: https://onqcms.com/api/campaign/fetch
             1438,
             1439
         ],
-        "mediaplayer_category_id": [
+        "mediaplayer_cat_ids": [
           111,
           222
         ],
-        "mediaplayer_tag_id": [
+        "mediaplayer_tag_ids": [
           123,
           345
         ],
