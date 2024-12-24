@@ -544,17 +544,19 @@ Endpoint: https://onqcms.com/api/campaign/fetch
         "campaign_sub_id": 76,
         "campaign_sub_name": "dj division 1",
         "campaign_sub_order": 1,
-        "playlist_content": "[33361, 33362, 33363, 33369, 33370, 33371, 33374, 33375, 33376]",
+        "playlist_content": [
+            33361,
+            33362,
+        ],
         "playlist_thumbs": {
-            "33361": "3-237-1651629762-74e0412-thumb.jpg",
-            "33362": "3-237-1651629763-304480f-thumb.jpg",
-            "33363": "3-237-1651629769-0ee87c6-thumb.jpg",
-            "33369": "3-237-1651629798-02f1411-thumb.jpg",
-            "33370": "3-237-1651629804-e3a059c-thumb.jpg",
-            "33371": "3-237-1651629806-2b39a5e-thumb.jpg",
-            "33374": "3-237-1651629817-e4436ac-thumb.jpg",
-            "33375": "3-237-1651629820-494e62b-thumb.jpg",
-            "33376": "3-237-1651629824-92352d9-thumb.jpg"
+            "33361": {
+                "file_title": "CR_May22_MumDay_1920x1080px_10.jpg",
+                "file_thumb": "3-237-1651629762-74e0412-thumb.jpg"
+            },
+            "33362": {
+                "file_title": "CR_May22_MumDay_1920x1080px_11.jpg",
+                "file_thumb": "3-237-1651629763-304480f-thumb.jpg"
+            }
         },
         "start_date_time": "2024-10-01 09:00:00",
         "end_date_time": "2024-10-30 18:00:00",
@@ -588,12 +590,29 @@ Endpoint: https://onqcms.com/api/campaign/fetch
         "campaign_sub_id": 77,
         "campaign_sub_name": "dj division 2",
         "campaign_sub_order": 2,
-        "playlist_content": "[56260, 56261, 56262, 56263]",
+        "playlist_content": [
+            56260,
+            56261,
+            56262,
+            56263
+        ],
         "playlist_thumbs": {
-            "56260": "3-474-1713752722-7b76837-thumb.jpeg",
-            "56261": "3-474-1713753413-7b76837-thumb.jpeg",
-            "56262": "3-474-1713753562-7b76837-thumb.jpeg",
-            "56263": "3-474-1713753605-7b76837-thumb.jpeg"
+            "56260": {
+                "file_title": "Demo Move.mp4",
+                "file_thumb": "3-474-1713752722-7b76837-thumb.jpeg"
+            },
+            "56261": {
+                "file_title": "Demo Move.mp4",
+                "file_thumb": "3-474-1713753413-7b76837-thumb.jpeg"
+            },
+            "56262": {
+                "file_title": "Demo Move.mp4",
+                "file_thumb": "3-474-1713753562-7b76837-thumb.jpeg"
+            },
+            "56263": {
+                "file_title": "Demo\nMove.mp4",
+                "file_thumb": "3-474-1713753605-7b76837-thumb.jpeg"
+            }
         },
         "start_date_time": null,
         "end_date_time": null,
