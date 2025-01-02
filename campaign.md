@@ -677,13 +677,10 @@ Endpoint: https://onqcms.com/api/campaign/edit
 | start_date_time     | datetime          | False     | validity start date time  |
 | end_date_time       | datetime          | False     | validity end date time    |
 | content             | array             | True      | content ID in order       |
-| mediaplayer_ids      | array            | True      | assigned media player ID  |
-| mediaplayer_category_id | array         | True      | assigned media category ID  |
-| mediaplayer_tag_id      | array         | True      | assigned media tag ID  |
-| tag_campaign_ids      | array           | True      | tag: campaign ID  |
-| category_campaign_ids | array           | True      | category: campaign ID  |
-| category_client_ids   | array           | True      | category: client ID  |
-
+| mediaplayer_ids      | array             | True     | assigned media player ID  |
+| tag_campaign_ids      | array             | True     | assigned media player ID  |
+| category_campaign_ids | array             | True     | assigned media player ID  |
+| category_client_ids   | array             | True     | assigned media player ID  |
 
 To remove start_data, start_time, end_date and end_time values, set empty value for the key. Any unset key will keep existing values.
 
