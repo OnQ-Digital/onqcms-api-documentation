@@ -880,14 +880,14 @@ The CMS expects an array of template structure objects as the input
 
 ```json
 {
-    "category_id": 7,
+    "category_id": [7,22],
     "object_type": "player"
 }
 
 ---
 
 {
-    "category_id": 7
+    "category_id": [7, 22, 33]
 }
 
 ---
@@ -908,8 +908,7 @@ The CMS expects an array of template structure objects as the input
 
 | Parameter           | Type              | Required  | Description               |
 |---------------------|-------------------|-----------|---------------------------|
-| category_key        | string            | True      | Category key name         |
-| category_value      | string            | True      | Category key's value      |
+| categories          | array             | True      | Category key and array of values |
 | object_type         | string            | True      | 'player', 'playlist', 'asset', 'campaign' |
 | object_id           | integer           | True      | array of integers or strings |
 
@@ -918,37 +917,47 @@ The CMS expects an array of template structure objects as the input
 
 ```json
 {
-    "category_key":"Client",
-    "category_value":"DJ-2",
-    "object_type":"campaign",
-    "object_id":[111,222,333]
+    "categories": [
+        { "key": "Client", "value": ["DJ-2"] },
+        { "key": "Type",   "value": ["Marketing"] },
+        { "key": "Region", "value": ["APAC", "MELBOURNE", "VICTORIA"] }
+    ],
+    "object_type": "campaign",
+    "object_id": [111, 222, 333]
 }
 
 --
 
 {
-    "category_key":"Brand",
-    "category_value":"Hugo Boss",
-    "object_type":"player",
-    "object_id":["testaaa001","testaaa002","offset-test1"]
+    "categories": [
+        { "key": "Client", "value": ["DJ-2"] },
+        { "key": "Type",   "value": ["Marketing"] },
+        { "key": "Region", "value": ["APAC", "MELBOURNE", "VICTORIA"] }
+    ],
+    "object_type": "player",
+    "object_id":[112,333,222]
 }
 
 -- 
-
 {
-    "category_key":"Brand",
-    "category_value":"Hugo Boss",
-    "object_type":"playlist",
-    "object_id":["testaaa001","testaaa002","offset-test1"]
+    "categories": [
+        { "key": "Client", "value": ["DJ-2"] },
+        { "key": "Type",   "value": ["Marketing"] },
+        { "key": "Region", "value": ["APAC", "MELBOURNE", "VICTORIA"] }
+    ],
+    "object_type": "playlist",
+    "object_id": [111, 222, 333]
 }
 
 --
-
 {
-    "category_key":"Brand",
-    "category_value":"Hugo Boss",
-    "object_type":"asset",
-    "object_id":["testaaa001","testaaa002","offset-test1"]
+    "categories": [
+        { "key": "Client", "value": ["DJ-2"] },
+        { "key": "Type",   "value": ["Marketing"] },
+        { "key": "Region", "value": ["APAC", "MELBOURNE", "VICTORIA"] }
+    ],
+    "object_type": "asset",
+    "object_id": [111, 222, 333]
 }
 
 ```
