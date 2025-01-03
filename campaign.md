@@ -881,16 +881,43 @@ The CMS expects an array of template structure objects as the input
 `Example request:`
 
 ```json
-{
-    "category_id": [7,22],
-    "object_type": "player"
-}
-
----
-
-{
-    "category_id": [7, 22, 33]
-}
+[
+    {
+        "category_id": "189",
+        "category_key": "region",
+        "category_value": "",
+        "updated_at": "2025-01-03 16:25:36",
+        "created_at": "2025-01-03 16:25:36"
+    },
+    {
+        "category_id": "197",
+        "category_key": "region",
+        "category_value": "region",
+        "updated_at": "2025-01-03 16:30:16",
+        "created_at": "2025-01-03 16:30:16"
+    },
+    {
+        "category_id": "237",
+        "category_key": "region",
+        "category_value": "apac",
+        "updated_at": "2025-01-03 16:33:10",
+        "created_at": "2025-01-03 16:33:10"
+    },
+    {
+        "category_id": "238",
+        "category_key": "region",
+        "category_value": "melbourne",
+        "updated_at": "2025-01-03 16:33:10",
+        "created_at": "2025-01-03 16:33:10"
+    },
+    {
+        "category_id": "239",
+        "category_key": "region",
+        "category_value": "victoria",
+        "updated_at": "2025-01-03 16:33:10",
+        "created_at": "2025-01-03 16:33:10"
+    }
+]
 
 ---
 
@@ -1006,7 +1033,7 @@ The CMS expects an array of template structure objects as the input
     "category_key":"Brand",
     "category_value":"Hugo Boss",
     "object_type":"player",
-    "object_id":["testaaa001","testaaa002","offset-test1"]
+    "object_id":[111,222,333]
 }
 
 -- 
@@ -1015,7 +1042,7 @@ The CMS expects an array of template structure objects as the input
     "category_key":"Brand",
     "category_value":"Hugo Boss",
     "object_type":"playlist",
-    "object_id":["testaaa001","testaaa002","offset-test1"]
+    "object_id":[111,222,333]
 }
 
 --
@@ -1024,7 +1051,7 @@ The CMS expects an array of template structure objects as the input
     "category_key":"Brand",
     "category_value":"Hugo Boss",
     "object_type":"asset",
-    "object_id":["testaaa001","testaaa002","offset-test1"]
+    "object_id":[111,222,333]
 }
 
 ```
