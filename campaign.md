@@ -19,7 +19,7 @@ At the moment, **1. Campaign Type & 2. Campaign Management** are for **internal 
     - [Endpoints Overviews](#endpoints-overviews)
   - [2.1. Create a new campaign](#21-create-a-new-campaign)
   - [2.2. Fetch campaigns](#22-fetch-campaigns)
-    - [2.2.1. Fetch all campaign by group](#221-fetch-all-campaign-by-group)
+    - [2.2.1. Fetch campaigns by group](#221-fetch-campaigns-by-group)
     - [2.2.2. Fetch a campaign with sub divisions (campaigns)](#222-fetch-a-campaign-with-sub-divisions-campaigns)
     - [2.2.3. Fetch a campaign detail with campaign ID](#223-fetch-a-campaign-detail-with-campaign-id)
   - [2.3. Update a campaign by ID](#23-update-a-campaign-by-id)
@@ -382,70 +382,166 @@ Endpoint: https://onqcms.com/api/campaign/fetch
 
 *Parameters*
 
-| Parameter           | Type      | Required  | Description               |
-|---------------------|-----------|-----------|---------------------------|
-| company_group_id    | integer   | True      | Company ID                |
-| campaign_id         | string    | True      | Campaign ID               |
-| start_date_time     | string    | True      | Start date time           |
-| end_date_time       | string    | True      | End date time             |
-| min_booking         | integer   | True      | (not used yet)            |
-| max_booking         | integer   | True      | (not used yet)            |
-| campaign_statuses   | array     | True      | Status requirement        |
-| mediaplayer_ids     | array     | True      | Player ID, [] for all     |
-| by_group            | integer   | True      | 1 for by group, 0 for division, 2 for details |
+| Parameter           | Type      | Required  | Description                                     |
+|---------------------|-----------|-----------|-------------------------------------------------|
+| company_group_id    | integer   | True      | Company ID                                      |
+| campaign_id         | string    | True      | Campaign ID                                     |
+| start_date_time     | string    | True      | Start date time                                 |
+| end_date_time       | string    | True      | End date time                                   |
+| min_booking         | integer   | False     | Maximum campaign's total assignments            |
+| max_booking         | integer   | False     | Minimum campaign's total assignments            |
+| campaign_statuses   | array     | False     | Status requirement                              |
+| mediaplayer_ids     | array     | False     | Player ID, [] for all                           |
+| mediaplayer_tag_ids | array     | False     | Player's Tag ID, [] for all                     |
+| mediaplayer_cat_ids | array     | False     | Player's Category ID, [] for all                |
+| by_group            | integer   | True      | 1 for by group, 0 for division, 2 for details   |
+| include_detail      | boolean   | False     | true, for including mediaplayers details. only used when by_group = 1 |
 
-### 2.2.1. Fetch all campaign by group
+### 2.2.1. Fetch campaigns by group
 `Request:`
 ```json
 {
-    "company_group_id": 3,
-    "campaign_id": 49,
-    "start_date_time": "2024-01-02 00:00:00",
-    "end_date_time": "2024-12-02 23:59:59",
-    "min_booking": null,
-    "max_booking": null,
-    "campaign_statuses": ["live","finished"],
-    "mediaplayer_ids": [36],
-    "by_group": 1
+    "company_group_id": "3",
+    "campaign_id": 7,
+    "start_date_time": "2025-01-07 00:00:00",
+    "end_date_time": "2029-01-06 00:00:00",
+    "min_bookings": 1,
+    "max_bookings": 10,
+    "campaign_statuses": [
+        "live"
+    ],
+    "mediaplayer_ids": [
+        1144
+    ],
+    "mediaplayer_cat_ids": [
+        3
+    ],
+    "mediaplayer_tag_ids": [
+        150
+    ],
+    "include_detail": false,
+    "by_group": 1,
 }
 ```
 `Success Response:`
 - Status: 200 OK
 ```json
+// example response, when "include_detail: false" in the request
 [
     {
-        "campaign_id": 1,
+        "campaign_id": 7,
         "company_group_id": 3,
-        "name": "Campaign 1",
+        "name": "Campaign 01",
         "asset_folder_id": 1882,
-        "color_hex": "#ABCDEF",
-        "total_campaign_sub": 2,
-        "start_date_time": null,
-        "end_date_time": null,
+        "color_hex": "#8482d8",
+        "start_date_time": "2025-01-01 00:00:00",
+        "end_date_time": "2025-01-31 23:59:00",
         "status": "live",
-        "total_assignments": 1,
-        "tag_campaign_ids": [],
-        "category_client_ids": [111],
-        "category_client_name": null
-        "createdAt": "2024-11-08 12:10:09",
-        "updatedAt": "2024-11-08 12:10:09"
-    },
-    {
-        "campaign_id": 8,
-        "company_group_id": 3,
-        "name": "Campaign 8",
-        "asset_folder_id": 1882,
-        "color_hex": null,
         "total_campaign_sub": 2,
-        "start_date_time": "2024-09-08 00:00:00",
-        "end_date_time": "2024-11-08 00:00:00",
-        "status": "finished",
-        "total_assignments": 0,
-        "tag_campaign_ids": [],
-        "category_client_ids": [112],
-        "category_client_name": "gucci",
-        "createdAt": "2024-11-08 12:10:09",
-        "updatedAt": "2024-11-08 12:10:09"
+        "total_assignments": 3,
+        "total_players": 2,
+        "campaign_thumb_name": "3-457-1715297080-0a86dc5-thumb.jpg",
+        "tag_campaign_ids": [
+            151
+        ],
+        "category_clients": [
+            {
+                "smart_categories_object_id": "7",
+                "smart_categories_id": 1,
+                "smart_categories_value": "ISSEY MIYAKE"
+            }
+        ],
+        "category_client_ids": [
+            1
+        ],
+        "category_client_name": "ISSEY MIYAKE",
+        "mediaplayers": [],
+        "mediaplayers_by_tag": [],
+        "mediaplayers_by_cat": [],
+        "createdAt": "2025-01-06 10:40:59",
+        "updatedAt": "2025-01-06 10:40:59"
+    }
+]
+```
+
+```json
+// example response, when "include_detail: true" in the request
+[
+    {
+        "campaign_id": 7,
+        "company_group_id": 3,
+        "name": "Campaign 01",
+        "asset_folder_id": 1882,
+        "color_hex": "#8482d8",
+        "start_date_time": "2025-01-01 00:00:00",
+        "end_date_time": "2025-01-31 23:59:00",
+        "status": "live",
+        "total_campaign_sub": 2,
+        "total_assignments": 3,
+        "total_players": 2,
+        "campaign_thumb_name": "3-457-1715297080-0a86dc5-thumb.jpg",
+        "tag_campaign_ids": [
+            151
+        ],
+        "category_clients": [
+            {
+                "smart_categories_object_id": "7",
+                "smart_categories_id": 1,
+                "smart_categories_value": "ISSEY MIYAKE"
+            }
+        ],
+        "category_client_ids": [
+            1
+        ],
+        "category_client_name": "ISSEY MIYAKE",
+        "mediaplayers": [
+            {
+                "campaign_id": 7,
+                "mediaplayer_id": 1144,
+                "mediaplayer_name": "a-frame"
+            },
+            {
+                "campaign_id": 7,
+                "mediaplayer_id": 1415,
+                "mediaplayer_name": "Offset Test"
+            }
+        ],
+        "mediaplayers_by_tag": [
+            {
+                "campaign_id": 7,
+                "mediaplayer_id": 1153,
+                "mediaplayer_name": "API Test 1",
+                "tag_id": 150,
+                "tag_name": "Group 1"
+            },
+            {
+                "campaign_id": 7,
+                "mediaplayer_id": 1416,
+                "mediaplayer_name": "API Test 2",
+                "tag_id": 152,
+                "tag_name": "Group 2"
+            }
+        ],
+        "mediaplayers_by_cat": [
+            {
+                "campaign_id": 7,
+                "mediaplayer_id": 1153,
+                "mediaplayer_name": "API Test 1",
+                "smart_categories_id": 3,
+                "smart_categories_key": "location",
+                "smart_categories_value": "melbourne"
+            },
+            {
+                "campaign_id": 7,
+                "mediaplayer_id": 1416,
+                "mediaplayer_name": "API Test 2",
+                "smart_categories_id": 4,
+                "smart_categories_key": "type",
+                "smart_categories_value": "marketing"
+            }
+        ],
+        "createdAt": "2025-01-06 10:40:59",
+        "updatedAt": "2025-01-06 10:40:59"
     }
 ]
 ```
