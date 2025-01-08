@@ -68,6 +68,98 @@ The above code gets all players with "demo" in their name that are in the "Austr
 
 [Top](#player)
 
+
+## Fetch Player - Campaign Details
+
+### Endpoint: player/detail
+### Response: JSON array of Player Objects 
+### Request Parameters 
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| company_group_id | integer | Company Group ID |
+| player_id | integer/array | Single Player ID or Array of mulple player IDs |
+
+
+### Example Request
+
+```
+curl -H "Authorization: bearer demo1234" -X POST -d '{ \
+"company_group_id": 3,
+"player_id":[1144, 1413]
+}' \
+https://onqcms.com/api/player/detail
+```
+```
+curl -H "Authorization: bearer demo1234" -X POST -d '{ \
+"company_group_id": 3,
+"player_id":1144
+}' \
+https://onqcms.com/api/player/detail
+```
+
+### Example Return
+```
+{
+    "categories": [
+        {
+            "key": "brand",
+            "value": [
+                "hugo boss"
+            ]
+        }
+    ],
+    "tags": {
+        "tag_id": [
+            "144"
+        ],
+        "tag_name": [
+            "test2"
+        ]
+    },
+    "campaign_details": [
+        {
+            "campaign_id": "142",
+            "campaign_name": "DJ Campaign",
+            "campaign_sub_id": "5",
+            "playlist_content": "[33361, 33362]"
+        },
+        {
+            "campaign_id": "142",
+            "campaign_name": "DJ Campaign",
+            "campaign_sub_id": "6",
+            "playlist_content": "[33362]"
+        }
+    ],
+    "file_contents": [
+        {
+            "file_content_id": 33361,
+            "file_title": "CR_May22_MumDay_1920x1080px_10.jpg",
+            "file_name": "3-237-1651629762-74e0412.jpg",
+            "file_thumb_name": "3-237-1651629762-74e0412-thumb.jpg",
+            "file_ext": "jpg",
+            "file_width": 1920,
+            "file_height": 1080,
+            "file_hash": "b7e0f08f88ca7c75982f98ffd01cd417",
+            "file_uid": null
+        },
+        {
+            "file_content_id": 33362,
+            "file_title": "CR_May22_MumDay_1920x1080px_11.jpg",
+            "file_name": "3-237-1651629763-304480f.jpg",
+            "file_thumb_name": "3-237-1651629763-304480f-thumb.jpg",
+            "file_ext": "jpg",
+            "file_width": 1920,
+            "file_height": 1080,
+            "file_hash": "feb7b8f3f798b145596f920ab5a9ac11",
+            "file_uid": null
+        }
+    ]
+}
+```
+
+[Top](#player)
+
 ## Update Player
 
 ### Endpoint: content/update
