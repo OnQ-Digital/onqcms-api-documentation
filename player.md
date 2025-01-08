@@ -109,14 +109,9 @@ https://onqcms.com/api/player/detail
             ]
         }
     ],
-    "tags": {
-        "tag_id": [
-            "144"
-        ],
-        "tag_name": [
-            "test2"
-        ]
-    },
+    "tags": [
+        "test 2"
+    ],
     "campaign_details": [
         {
             "campaign_id": "142",
