@@ -116,14 +116,39 @@ https://onqcms.com/api/player/detail
         {
             "campaign_id": "142",
             "campaign_name": "DJ Campaign",
-            "campaign_sub_id": "5",
-            "playlist_content": "[33361, 33362]"
+            "campaign_sub": [
+                {
+                    "campaign_sub_id": "5",
+                    "playlist_content": [
+                        33361
+                    ]
+                },
+                {
+                    "campaign_sub_id": "6",
+                    "playlist_content": [
+                        33362
+                    ]
+                }
+            ]
         },
         {
-            "campaign_id": "142",
+            "campaign_id": "143",
             "campaign_name": "DJ Campaign",
-            "campaign_sub_id": "6",
-            "playlist_content": "[33362]"
+            "campaign_sub": [
+                {
+                    "campaign_sub_id": "7",
+                    "playlist_content": [
+                        33361,
+                        33362
+                    ]
+                },
+                {
+                    "campaign_sub_id": "8",
+                    "playlist_content": [
+                        33362
+                    ]
+                }
+            ]
         }
     ],
     "file_contents": [
