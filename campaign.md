@@ -286,6 +286,12 @@ Endpoint: https://onqcms.com/api/campaign/create
 | name                | string            | True      | Campaign name             |
 | asset_folder_id     | integer           | True      | Default asset folder ID   |
 | color_hex           | string            | True      | Campaign color code       |
+| color_hex           | string            | True      | Campaign color code       |
+| num_slots           | integer           | True      | Number of Slot            |
+| asset_per_loop      | integer           | True      | Asset Plays per Loop      |
+| fill_empty_slot     | integer           | False     | Fill Empty Slot           |
+| fill_cond_limit     | integer           | False     | Fill Slot - Limit         |
+| fill_cond_slot      | integer           | False     | Fill Slot - Condition     |
 | campaign_sub        | array (campaign object) | True | List of campaign object  |
 
 ---
@@ -297,6 +303,7 @@ Endpoint: https://onqcms.com/api/campaign/create
 | name                | string            | True      | division name             |
 | start_date_time     | datetime          | False     | validity start date time  |
 | end_date_time       | datetime          | False     | validity end date time    |
+| selected_days       | array             | False      | mon, tue, wed, thu, fri, sat, sun |
 | content             | array             | True      | content ID in order       |
 | mediaplayer_id      | array             | False     | assigned media player ID  |
 | mediaplayer_category_id | array             | False     | Player Category ID        |
@@ -656,6 +663,11 @@ Endpoint: https://onqcms.com/api/campaign/fetch
         },
         "start_date_time": "2024-10-01 09:00:00",
         "end_date_time": "2024-10-30 18:00:00",
+        "selected_days": [
+            "wed",
+            "thu",
+            "fri"
+        ],
         "created_at": "2024-12-12 09:41:57",
         "updated_at": "2024-12-12 09:41:57",
         "mediaplayer_ids": [
@@ -714,6 +726,11 @@ Endpoint: https://onqcms.com/api/campaign/fetch
         "end_date_time": null,
         "created_at": "2024-12-12 09:41:57",
         "updated_at": "2024-12-12 09:41:57",
+        "selected_days": [
+            "wed",
+            "thu",
+            "fri"
+        ],
         "mediaplayer_ids": [
             1413,
             1438,
