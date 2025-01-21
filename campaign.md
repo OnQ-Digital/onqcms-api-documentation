@@ -10,6 +10,7 @@ At the moment, **1. Campaign Type & 2. Campaign Management** are for **internal 
 - [TOC](#toc)
 - [1. Campaign Type](#1-campaign-type)
   - [1.1. Create a new campaign type](#11-create-a-new-campaign-type)
+  - [| slot\_duration       | integer           | True      | Time for slot             |](#-slot_duration--------integer------------true-------time-for-slot-------------)
   - [1.2. Fetch campaigns type by ID OR All](#12-fetch-campaigns-type-by-id-or-all)
     - [1.2.1. List All Campaign](#121-list-all-campaign)
     - [1.2.2. Fetch a campaign type by ID](#122-fetch-a-campaign-type-by-id)
@@ -61,7 +62,8 @@ The CMS expects an array of template structure objects as the input
 | company_group_id    | integer           | True      | Company group ID |
 | name                | string            | True      | Campaign type name  |
 | template_structure  | array (template structure object) | True  | These objects specify details such as the campaign slot type, playback settings, duration, and additional attributes.|
-
+| num_slots           | integer           | True      | Number of Slot            |
+| slot_duration       | integer           | True      | Time for slot             |
 ---
 
 <br>
@@ -82,6 +84,8 @@ The CMS expects an array of template structure objects as the input
 {
   "company_group_id": 3,
   "name": "David Jones Campaigns",
+  "num_slots": 4,
+  "slot_duration" 15,
   "template_structure": [
     {"campaign-slot": "standard", "playback": "fixed", "time": 15, "truncate": true},
     {"campaign-slot": "standard", "playback": "fixed", "time": 15, "truncate": true},
@@ -98,6 +102,8 @@ The CMS expects an array of template structure objects as the input
   "campaign_type_id": 2,
   "company_group_id": 3,
   "name": "David Jones Campaigns",
+  "num_slots": 4, 
+  "slot_duration" 15,
   "template_structure": [
     {"campaign-slot": "standard", "playback": "fixed", "time": 15, "truncate": true},
     {"campaign-slot": "standard", "playback": "fixed", "time": 15, "truncate": true},
@@ -183,6 +189,8 @@ Endpoint: https://onqcms.com/api/campaign/type/fetch
   "campaign_type_id": 2,
   "company_group_id": 1,
   "name": "New Campaign",
+  "num_slots": 4,
+  "slot_duration" 15,
   "template_structure": ((JSON)),
   "createdAt": "2024-10-01T10:00:00.000Z",
   "updatedAt": "2024-10-01T10:00:00.000Z"
@@ -207,6 +215,8 @@ Endpoint: https://onqcms.com/api/campaign/type/edit
   "company_group_id": 1,
   "name": "Updated Campaign type",
   "template_structure": ((JSON)),
+  "num_slots": 4,
+  "slot_duration" 15
 }
 ```
 `Response:`
@@ -216,6 +226,8 @@ Endpoint: https://onqcms.com/api/campaign/type/edit
   "campaign_type_id": 2,
   "company_group_id": 1,
   "name": "Updated Campaign type",
+  "num_slots": 4,
+  "slot_duration" 15,
   "template_structure": ((JSON)),
   "createdAt": "2024-10-01T10:00:00.000Z",
   "updatedAt": "2024-10-01T10:00:00.000Z"
