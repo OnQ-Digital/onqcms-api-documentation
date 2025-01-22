@@ -1312,7 +1312,7 @@ The CMS expects an array of tag structure objects as the input
 
 | Parameter           | Type              | Required  | Description               |
 |---------------------|-------------------|-----------|---------------------------|
-| tag_id              | integer           | True      | Tag name                  |
+| tag_id              | integer/array     | True      | Tag id in either integer or array     |
 | object_type         | string            | True      | 'player', 'playlist', 'asset', 'campaign' |
 | object_id           | array             | True      | array of integers or strings |
 
@@ -1321,7 +1321,7 @@ The CMS expects an array of tag structure objects as the input
 
 ```json
 {
-    "tag_id":7,
+    "tag_id":[7],
     "object_type":"player",
     "object_id":["testaaa001","testaaa002","test12"]
 }
