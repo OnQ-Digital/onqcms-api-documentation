@@ -1321,9 +1321,9 @@ The CMS expects an array of tag structure objects as the input
 
 ```json
 {
-    "tag_id":[7],
+    "tag_id":[144,145],
     "object_type":"player",
-    "object_id":["testaaa001","testaaa002","test12"]
+    "object_id":[307]
 }
 
 ```
@@ -1332,8 +1332,14 @@ The CMS expects an array of tag structure objects as the input
 
 ```json
 {
+    "removed":[
+        [3,"146","campaign",307]
+        ],
+    "added":[
+        [3,144,"campaign",307],
+        [3,145,"campaign",307]
+        ]
 }
-
 ```
 ## 4.4. Delete Tag
 Endpoint: https://onqcms.com/api/smart_tag/delete
