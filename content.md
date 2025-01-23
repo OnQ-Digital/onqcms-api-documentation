@@ -3,6 +3,7 @@
 The onQ CMS API allows users to fetch, upload, edit and delete content. Content is stored in folders (which can contain sub-folders), and the API allows the creation and deletion of content folders. A single piece of content on the CMS is called an **asset**.
 
 - [Fetch Content](#fetch-content)
+- [Fetch File](#fetch-file)
 - [Create Content](#create-content)
 - [Create Content from URL](#create-content-from-url)
 - [Update Content](#update-content)
@@ -89,6 +90,59 @@ curl -H "Authorization: bearer demo1234" -X POST -d '{
 https://onqcms.com/api/content/fetch
 ```
 This request will fetch all mp4 content with "demo" in its name in the campaigns folder (which is in the marketing folder), but not any of its sub-folders. The assets must have the references "demo" and "demo_vid" to be returned.
+
+## Fetch File
+
+### Endpoint: file/fetch
+### Response: JSON array of [Asset Objects](#asset-parameters)
+
+### Request Parameters 
+
+| Parameter  | Type           | Required    |Description |
+|------------|----------------|-------------|-------------|
+| uid       | integer/array   |  False      | UID (file_uid) Value. Null for all group files |
+
+### Example Request
+
+```
+curl -H "Authorization: bearer demo1234" -X POST -d '{
+"uid":"uid_1"
+}' \
+https://onqcms.com/api/file/fetch
+```
+This request will fetch file content with file download URL details
+
+### Example of return values
+ ```
+ [
+     {
+        "file_content_id": "111",
+        "file_group_id": "111",
+        "file_user_id": "11",
+        "file_title": "abc.mp4",
+        "file_name": "3-5-111-xxx.mp4",
+        "file_ext": "mp4",
+        "file_width": "4080",
+        "file_height": "1920",
+        "file_size": "33306454",
+        "file_hash": "ecd7c5b7axxxxxxxxxxx106e58c51891",
+        "file_thumb_name": "3-5-111-xxx-thumb.jpg",
+        "file_icon_name": "3-5-111-xxx-icon.jpg",
+        "file_uploaded": "1600164009",
+        "encode_wait": "0",
+        "valid_from": null,
+        "valid_until": null,
+        "file_folder_id": null,
+        "file_json_name": null,
+        "file_uid": "uid_1",
+        "download_url": "https://xxxx.blob.core.windows.net/xxx/",
+        "file_download_url": "https://xxxx.blob.core.windows.net/..../3-5-111-xxx.mp4",
+        "file_thumb_download_url": "https://xxxx.blob.core.windows.net/..../3-5-111-xxx-thumb.jpg",
+        "file_icon_download_url": "https://xxxx.blob.core.windows.net/..../3-5-111-xxx-icon.jpg"
+    },
+    ..
+ ]
+ ```
 
 ## Create Content
 
