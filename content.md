@@ -28,6 +28,7 @@ The onQ CMS API allows users to fetch, upload, edit and delete content. Content 
 | folder      | array (string)           | The folder that the asset is stored in. Contains the full folder path, with the 'leftmost' item being the closest to root level. For  example, an asset stored in a 'campaigns' folder, which is itself stored in a 'marketing' folder would have a folder value of ["marketing","campaigns"]. |
 | references  | array (string)           | A list of additional names that refer to this asset. Used to provide an additional name/tag against the asset in the proof of play reports. |
 | validity    | object (see table below) | An object that defines whether an asset is valid to play, regardless of whether it is an active playlist or not. |
+| player_check | Array ({id:"Player ID",valid:Boolean}) | A list of players specified in **player_check** when creating a new asset - returns whether the specified players aspect ratio is suitable for the asset, accounting for the aspect tolerance set on the player. |
 
 ### Validity Parameters
 
@@ -56,7 +57,8 @@ The onQ CMS API allows users to fetch, upload, edit and delete content. Content 
         "start_time":"07:00",
         "end_time":"17:00",
         "date_time_independent":true
-    }
+    },
+    player_check:[{id:"123",valid:true}]
 }
 ```
 [Top](#content)
@@ -75,7 +77,8 @@ The onQ CMS API allows users to fetch, upload, edit and delete content. Content 
 | type       | string         | Only returns assets matching the type.
 | folder     | array (string) | Full path to the folder to filter on. The items should be ordered left-to-right based on how close the folder is to the root level. If left empty, all folders will be searched. |
 | recurse    | boolean        | Check child folders of the search folder. Default is true. |
-| references | array (string) | Only return assets that contain *all* references in the **references** array.
+| references | array (string) | Only return assets that contain *all* references in the **references** array. |
+| check_players | array (string) | The system will check the dimensions of the uploaded content against the aspect ratio of the players identified by their IDs in the array, accounting for their tolerance settings. |
 
 ### Example Request
 
@@ -161,12 +164,13 @@ The request to create an asset must have the multi-part/form encoding.
 
 ### Data JSON Object
 
-| Parameter  | Type | Required          | Description |
-|------------|------|-------------------|-------------|
-| name       | string                   | True | The name of the asset (as it appears on CMS). Does not need to be unique. |
-| folder     | array (string)           | False | The folder that the asset is stored in. Contains the full folder path, with the 'leftmost' item being the closest to root level. For example, an asset stored in a 'campaigns' folder, which is itself stored in a 'marketing' folder would have a folder value of ["marketing","campaigns"]. Asset will be stored at the root level if not present.
-| references | array (string)           | False | A list of additional names that refer to this asset. Used to provide an additional name/tag against the asset in the proof of play reports.
-| validity   | [Validity JSON Object](#validity-parameters) | False | An object that defines whether an asset is valid to play, regardless of whether it is an active playlist or not. |
+| Parameter     | Type                     | Required          | Description |
+|---------------|--------------------------|-------------------|-------------|
+| name          | string                   | True              | The name of the asset (as it appears on CMS). Does not need to be unique. |
+| folder        | array (string)           | False             | The folder that the asset is stored in. Contains the full folder path, with the 'leftmost' item being the closest to root level. For example, an asset stored in a 'campaigns' folder, which is itself stored in a 'marketing' folder would have a folder value of ["marketing","campaigns"]. Asset will be stored at the root level if not present.
+| references    | array (string)           | False             | A list of additional names that refer to this asset. Used to provide an additional name/tag against the asset in the proof of play reports.
+| validity      | [Validity JSON Object](#validity-parameters) | False | An object that defines whether an asset is valid to play, regardless of whether it is an active playlist or not. |
+| check_players | array (string) | The system will check the dimensions of the uploaded content against the aspect ratio of the players identified by their IDs in the array, accounting for their tolerance settings. |
 
 ### Example Request
 ```
@@ -208,6 +212,7 @@ library. We can also choose to use the URL as a UID for future referencing of th
 | folder     | array (string)           | False | The folder that the asset is stored in. Contains the full folder path, with the 'leftmost' item being the closest to root level. For example, an asset stored in a 'campaigns' folder, which is itself stored in a 'marketing' folder would have a folder value of ["marketing","campaigns"]. Asset will be stored at the root level if not present.
 | references | array (string)           | False | A list of additional names that refer to this asset. Used to provide an additional name/tag against the asset in the proof of play reports.
 | validity   | [Validity JSON Object](#validity-parameters) | False | An object that defines whether an asset is valid to play, regardless of whether it is an active playlist or not. |
+| check_players | array (string) | The system will check the dimensions of the uploaded content against the aspect ratio of the players identified by their IDs in the array, accounting for their tolerance settings. |
 
 ### Example Request
 ```
