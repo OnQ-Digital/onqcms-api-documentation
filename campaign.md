@@ -26,6 +26,7 @@ At the moment, **1. Campaign Type & 2. Campaign Management** are for **internal 
   - [2.3. Update a campaign by ID](#23-update-a-campaign-by-id)
   - [2.4. Delete single or multiple  campaigns](#24-delete-single-or-multiple--campaigns)
   - [2.5. Campaign Availability](#25-campaign-availability)
+  - [2.6. Campaign Report](#26-campaign-report)
 - [3. Category](#3-category)
   - [3.1. Fetch Category](#31-fetch-category)
   - [3.2. Create a new category](#32-create-a-new-category)
@@ -1017,6 +1018,113 @@ Endpoint: https://onqcms.com/api/campaign/availability
 }
 ```
 [Top ↑](#campaign)
+
+
+## 2.6. Campaign Report
+This endpoint returns mediaplayer reported data grouped by campaign id, including data for overview, files/assets breakdown and mediaplayer breakdown
+
+Endpoint: https://onqcms.com/api/campaign/report
+
+*Parameters*
+
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| company_group_id    | integer           | True      | Company ID                |
+| campaign_id         | integer           | True      | Campaign ID               |
+
+`Request:`
+```json
+{
+    "company_group_id": "3",
+    "campaign_id": 181
+}
+```
+
+`Response:`
+
+- Satus: 200 OK
+```json
+{
+    "campaign_id": 181,
+    "overview": {
+        "campaign_id": 181,
+        "total_counts": "466",
+        "first_report_date": "2025-02-07 00:00:00",
+        "final_report_date": "2025-02-11 00:00:00",
+        "total_mediaplayers": 1,
+        "campaign_name": "Dev - 20250203 - 1330"
+    },
+    "files": [
+        {
+            "campaign_id": 181,
+            "file_id": 56785,
+            "total_counts": "233",
+            "file_name": "3-466-1735265739-b775422.jpg",
+            "file_title": "asset-image-0005.jpg",
+            "file_thumb_name": "3-466-1735265739-b775422-thumb.jpg",
+            "campaign_subs": [
+                {
+                    "campaign_sub_name": "Dev - 20250203 - 1330",
+                    "db_campaign_sub_name": "Dev - 20250203 - 1330"
+                },
+                {
+                    "campaign_sub_name": "Dev - 20250203 - 1330",
+                    "db_campaign_sub_name": null
+                }
+            ]
+        },
+        {
+            "campaign_id": 181,
+            "file_id": 56786,
+            "total_counts": "233",
+            "file_name": "3-466-1735265739-b1a52cf.jpg",
+            "file_title": "asset-image-0002.jpg",
+            "file_thumb_name": "3-466-1735265739-b1a52cf-thumb.jpg",
+            "campaign_subs": [
+                {
+                    "campaign_sub_name": "Dev - 20250203 - 1330",
+                    "db_campaign_sub_name": "Dev - 20250203 - 1330"
+                },
+                {
+                    "campaign_sub_name": "Dev - 20250203 - 1330",
+                    "db_campaign_sub_name": null
+                }
+            ]
+        }
+    ],
+    "mediaplayers": [
+        {
+            "campaign_id": 181,
+            "mediaplayer_id": 1428,
+            "total_counts": "466",
+            "mediaplayer_name": "Electron-Smart-2",
+            "campaign_subs": [
+                {
+                    "campaign_sub_name": "Dev - 20250203 - 1330",
+                    "db_campaign_sub_name": null
+                },
+                {
+                    "campaign_sub_name": "Dev - 20250203 - 1330",
+                    "db_campaign_sub_name": "Dev - 20250203 - 1330"
+                }
+            ]
+        }
+    ]
+}
+```
+
+`Error Response:`
+
+- Status: 400 Bad Request
+- Status: 404 Not Found
+```json
+{
+    "error": "Campaign report not found"
+}
+```
+
+[Top ↑](#campaign)
+
 
 # 3. Category
 
