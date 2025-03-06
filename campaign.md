@@ -60,8 +60,9 @@ The CMS expects an array of template structure objects as the input
 
 | Parameter           | Type              | Required  | Description               |
 |---------------------|-------------------|-----------|---------------------------|
-| company_group_id    | integer           | True      | Company group ID |
-| name                | string            | True      | Campaign type name  |
+| company_group_id    | integer           | True      | Company group ID          |
+| name                | string            | True      | Campaign type name        |
+| mediaplayer_id      | integer           | True      | Media player ID           |
 | template_structure  | array (template structure object) | True  | These objects specify details such as the campaign slot type, playback settings, duration, and additional attributes.|
 | num_slots           | integer           | True      | Number of Slot            |
 | slot_duration       | integer           | True      | Time for slot             |
@@ -75,7 +76,6 @@ The CMS expects an array of template structure objects as the input
 | campaign-slot       | string            | If no 'stream'    | Campaign slot type|
 | stream              | json              | If no 'campaign-slot'  | Playlist Json|
 | playback            | string            | True      | Playback type             |
-| time                | integer           | True      | Time for the slot         |
 | truncate            | Boolean           | True      | Truncate option           |
 
 
@@ -85,13 +85,14 @@ The CMS expects an array of template structure objects as the input
 {
   "company_group_id": 3,
   "name": "David Jones Campaigns",
+  "mediaplayer_id": 1442,
   "num_slots": 4,
   "slot_duration" 15,
   "template_structure": [
-    {"campaign-slot": "standard", "playback": "fixed", "time": 15, "truncate": true},
-    {"campaign-slot": "standard", "playback": "fixed", "time": 15, "truncate": true},
-    {"campaign-slot": "standard", "playback": "fixed", "time": 15, "truncate": true},
-    {"stream": "internal_content_playlist", "playback": "fixed", "time": 15, "truncate": true}
+    {"campaign-slot": "standard", "playback": "fixed", "truncate": true},
+    {"campaign-slot": "standard", "playback": "fixed", "truncate": true},
+    {"campaign-slot": "standard", "playback": "fixed", "truncate": true},
+    {"stream": "internal_content_playlist", "playback": "fixed", "truncate": true}
   ]
 }
 ```
@@ -103,13 +104,14 @@ The CMS expects an array of template structure objects as the input
   "campaign_type_id": 2,
   "company_group_id": 3,
   "name": "David Jones Campaigns",
+  "mediaplayer_id": 1442,
   "num_slots": 4, 
   "slot_duration" 15,
   "template_structure": [
-    {"campaign-slot": "standard", "playback": "fixed", "time": 15, "truncate": true},
-    {"campaign-slot": "standard", "playback": "fixed", "time": 15, "truncate": true},
-    {"campaign-slot": "standard", "playback": "fixed", "time": 15, "truncate": true},
-    {"stream": "internal_content_playlist", "playback": "fixed", "time": 15, "truncate": true}
+    {"campaign-slot": "standard", "playback": "fixed", "truncate": true},
+    {"campaign-slot": "standard", "playback": "fixed", "truncate": true},
+    {"campaign-slot": "standard", "playback": "fixed", "truncate": true},
+    {"stream": "internal_content_playlist", "playback": "fixed", "truncate": true}
   ]
   "createdAt": "2024-10-01T10:00:00.000Z",
   "updatedAt": "2024-10-01T10:00:00.000Z"
@@ -1134,18 +1136,9 @@ Base URL: https://onqcms.com/api/smart_category
 
 Endpoint: https://onqcms.com/api/smart_category/fetch
 
-**Request Parameters**
-
-The CMS expects an array of template structure objects as the input
-| Parameter           | Type              | Required  | Description               |
-|---------------------|-------------------|-----------|---------------------------|
-| category_id         | integer           | False      | Category ID              |
-| category_key        | string            | False     | Category key              |
-| category_val        | string            | False     | Category Value              |
-| object_type         | string            | False      | 'player', 'playlist', 'asset', 'campaign' |
-| object_id           | integer           | False     | Object ID              |
 
 `Example request:`
+[]
 
 ```json
 [
