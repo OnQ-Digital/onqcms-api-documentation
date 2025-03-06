@@ -1136,9 +1136,18 @@ Base URL: https://onqcms.com/api/smart_category
 
 Endpoint: https://onqcms.com/api/smart_category/fetch
 
+**Request Parameters**
+
+The CMS expects an array of template structure objects as the input
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| category_id         | integer           | False      | Category ID              |
+| category_key        | string            | False     | Category key              |
+| category_val        | string            | False     | Category Value              |
+| object_type         | string            | False      | 'player', 'playlist', 'asset', 'campaign' |
+| object_id           | integer           | False     | Object ID              |
 
 `Example request:`
-[]
 
 ```json
 [
