@@ -940,30 +940,32 @@ Endpoint: https://onqcms.com/api/campaign/delete
 ```
 [Top ↑](#campaign)
 ## 2.5. Campaign Availability
-This endpoint returns availability sorted by date and players. If any campaign division overlaps with the specified date-time range, the main campaign is selected and counted.
+This endpoint returns availability statistics data, split by dates and months within selected start and end datetime for selected mediaplayers. Each mediaplayer has its own campaign type and number of slots defined. If any campaign division overlaps with the specified date-time range, the main campaign's number of slots is counted for assigned mediaplayer.
 
 Endpoint: https://onqcms.com/api/campaign/availability
 
 *Parameters*
 
-| Parameter           | Type              | Required  | Description               |
-|---------------------|-------------------|-----------|---------------------------|
-| company_group_id    | integer           | True      | Company ID                |
-| start_date_time     | datetime          | False     | start date time           |
-| end_date_time       | datetime          | False     | end date time             |
-| min_booking         | array             | False     | (Not used yet)            |
-| max_booking         | array             | False     | (Not used yet)            |
-| mediaplayer_id      | array             | False     | media player ID or null for all player |
+| Parameter           | Type              | Required  | Description                           |
+|---------------------|-------------------|-----------|---------------------------------------|
+| company_group_id    | integer           | True      | Company ID                            |
+| start_date_time     | string            | True      | start date time (yyyy-MM-dd HH:mm:ss) |
+| end_date_time       | string            | True      | end date time (yyyy-MM-dd HH:mm:ss)   |
+| min_booking         | number            | False     | (Not used yet)                        |
+| max_booking         | number            | False     | (Not used yet)                        |
+| mediaplayer_ids     | array             | False     | media player ids                      |
+| mediaplayer_tag_ids | array             | False     | media player tag ids                  |
+| mediaplayer_cat_ids | array             | False     | media player category ids             |
 
 `Request:`
 ```json
 {
     "company_group_id": 3,
-    "start_date_time": "2024-10-02 00:00:00",
-    "end_date_time": "2024-11-02 23:59:59",
-    "min_booking": null,
-    "max_booking": null,
-    "mediaplayer_ids": [36,542,906,980,1413,1143,1144,1453]
+    "start_date_time": "2025-04-30 00:00:00",
+    "end_date_time": "2025-05-01 23:59:59",
+    "mediaplayer_ids": [],
+    "mediaplayer_tag_ids": [],
+    "mediaplayer_cat_ids": []
 }
 ```
 
@@ -971,52 +973,222 @@ Endpoint: https://onqcms.com/api/campaign/availability
 
 ```json
 {
-    "2024-10-02": [
+    "by_dates": [
         {
-            "mediaplayer_id": 36,
-            "number_of_campaigns": 2,
-            "total_slot": 4,
-            "used_rate": 50,
-            "available_rate": 50
+            "id": "2025-04-30",
+            "date": "2025-04-30",
+            "total_mediaplayers": 6,
+            "total_slots": 22,
+            "total_used_slots": 2,
+            "total_available_slots": 20,
+            "average_slots": 3.6666666666666665,
+            "average_used_slots": 0.3333333333333333,
+            "average_available_slots": 3.3333333333333335,
+            "mode_used_total_mediaplayers": 4,
+            "mode_used_average_slots": 4,
+            "mode_used_slots": 0,
+            "mode_available_total_mediaplayers": 4,
+            "mode_available_average_slots": 4,
+            "mode_available_slots": 4,
+            "max_used_mediaplayer": {
+                "date": "2025-04-30",
+                "mediaplayer_id": 1415,
+                "campaign_type_name": "Offset Test",
+                "total_slots": 2,
+                "number_of_campaigns": 1,
+                "used_slots": 1,
+                "available_slots": 1
+            },
+            "min_used_mediaplayer": {
+                "date": "2025-04-30",
+                "mediaplayer_id": 1144,
+                "campaign_type_name": "a-frame",
+                "total_slots": 4,
+                "number_of_campaigns": 0,
+                "used_slots": 0,
+                "available_slots": 4
+            },
+            "max_available_mediaplayer": {
+                "date": "2025-04-30",
+                "mediaplayer_id": 1144,
+                "campaign_type_name": "a-frame",
+                "total_slots": 4,
+                "number_of_campaigns": 0,
+                "used_slots": 0,
+                "available_slots": 4
+            },
+            "min_available_mediaplayer": {
+                "date": "2025-04-30",
+                "mediaplayer_id": 1415,
+                "campaign_type_name": "Offset Test",
+                "total_slots": 2,
+                "number_of_campaigns": 1,
+                "used_slots": 1,
+                "available_slots": 1
+            }
         },
         {
-            "mediaplayer_id": 906,
-            "number_of_campaigns": 0,
-            "total_slot": 4,
-            "used_rate": 0,
-            "available_rate": 100
-        },
-       ...
-        {
-            "mediaplayer_id": 1453,
-            "number_of_campaigns": 0,
-            "total_slot": 4,
-            "used_rate": 0,
-            "available_rate": 100
+            "id": "2025-05-01",
+            "date": "2025-05-01",
+            "total_mediaplayers": 6,
+            "total_slots": 22,
+            "total_used_slots": 0,
+            "total_available_slots": 22,
+            "average_slots": 3.6666666666666665,
+            "average_used_slots": 0,
+            "average_available_slots": 3.6666666666666665,
+            "mode_used_total_mediaplayers": 6,
+            "mode_used_average_slots": 3.6666666666666665,
+            "mode_used_slots": 0,
+            "mode_available_total_mediaplayers": 5,
+            "mode_available_average_slots": 4,
+            "mode_available_slots": 4,
+            "max_used_mediaplayer": {
+                "date": "2025-05-01",
+                "mediaplayer_id": 1144,
+                "campaign_type_name": "a-frame",
+                "total_slots": 4,
+                "number_of_campaigns": 0,
+                "used_slots": 0,
+                "available_slots": 4
+            },
+            "min_used_mediaplayer": {
+                "date": "2025-05-01",
+                "mediaplayer_id": 1144,
+                "campaign_type_name": "a-frame",
+                "total_slots": 4,
+                "number_of_campaigns": 0,
+                "used_slots": 0,
+                "available_slots": 4
+            },
+            "max_available_mediaplayer": {
+                "date": "2025-05-01",
+                "mediaplayer_id": 1144,
+                "campaign_type_name": "a-frame",
+                "total_slots": 4,
+                "number_of_campaigns": 0,
+                "used_slots": 0,
+                "available_slots": 4
+            },
+            "min_available_mediaplayer": {
+                "date": "2025-05-01",
+                "mediaplayer_id": 1415,
+                "campaign_type_name": "Offset Test",
+                "total_slots": 2,
+                "number_of_campaigns": 0,
+                "used_slots": 0,
+                "available_slots": 2
+            }
         }
     ],
-    "2024-10-03": [
+    "by_month": [
         {
-            "mediaplayer_id": 36,
-            "number_of_campaigns": 2,
-            "total_slot": 4,
-            "used_rate": 50,
-            "available_rate": 50
+            "id": "2025-04",
+            "date": "2025-04",
+            "total_mediaplayers": 6,
+            "total_slots": 22,
+            "total_used_slots": 2,
+            "total_available_slots": 20,
+            "average_slots": 3.6666666666666665,
+            "average_used_slots": 0.3333333333333333,
+            "average_available_slots": 3.3333333333333335,
+            "mode_used_total_mediaplayers": 4,
+            "mode_used_average_slots": 4,
+            "mode_used_slots": 0,
+            "mode_available_total_mediaplayers": 4,
+            "mode_available_average_slots": 4,
+            "mode_available_slots": 4,
+            "max_used_mediaplayer": {
+                "date": "2025-04-30",
+                "mediaplayer_id": 1415,
+                "campaign_type_name": "Offset Test",
+                "total_slots": 2,
+                "number_of_campaigns": 1,
+                "used_slots": 1,
+                "available_slots": 1
+            },
+            "min_used_mediaplayer": {
+                "date": "2025-04-30",
+                "mediaplayer_id": 1144,
+                "campaign_type_name": "a-frame",
+                "total_slots": 4,
+                "number_of_campaigns": 0,
+                "used_slots": 0,
+                "available_slots": 4
+            },
+            "max_available_mediaplayer": {
+                "date": "2025-04-30",
+                "mediaplayer_id": 1144,
+                "campaign_type_name": "a-frame",
+                "total_slots": 4,
+                "number_of_campaigns": 0,
+                "used_slots": 0,
+                "available_slots": 4
+            },
+            "min_available_mediaplayer": {
+                "date": "2025-04-30",
+                "mediaplayer_id": 1415,
+                "campaign_type_name": "Offset Test",
+                "total_slots": 2,
+                "number_of_campaigns": 1,
+                "used_slots": 1,
+                "available_slots": 1
+            }
         },
-        ...
-        ...
         {
-            "mediaplayer_id": 1453,
-            "number_of_campaigns": 0,
-            "total_slot": 4,
-            "used_rate": 0,
-            "available_rate": 100
+            "id": "2025-05",
+            "date": "2025-05",
+            "total_mediaplayers": 6,
+            "total_slots": 22,
+            "total_used_slots": 0,
+            "total_available_slots": 22,
+            "average_slots": 3.6666666666666665,
+            "average_used_slots": 0,
+            "average_available_slots": 3.6666666666666665,
+            "mode_used_total_mediaplayers": 6,
+            "mode_used_average_slots": 3.6666666666666665,
+            "mode_used_slots": 0,
+            "mode_available_total_mediaplayers": 5,
+            "mode_available_average_slots": 4,
+            "mode_available_slots": 4,
+            "max_used_mediaplayer": {
+                "date": "2025-05-01",
+                "mediaplayer_id": 1144,
+                "campaign_type_name": "a-frame",
+                "total_slots": 4,
+                "number_of_campaigns": 0,
+                "used_slots": 0,
+                "available_slots": 4
+            },
+            "min_used_mediaplayer": {
+                "date": "2025-05-01",
+                "mediaplayer_id": 1144,
+                "campaign_type_name": "a-frame",
+                "total_slots": 4,
+                "number_of_campaigns": 0,
+                "used_slots": 0,
+                "available_slots": 4
+            },
+            "max_available_mediaplayer": {
+                "date": "2025-05-01",
+                "mediaplayer_id": 1144,
+                "campaign_type_name": "a-frame",
+                "total_slots": 4,
+                "number_of_campaigns": 0,
+                "used_slots": 0,
+                "available_slots": 4
+            },
+            "min_available_mediaplayer": {
+                "date": "2025-05-01",
+                "mediaplayer_id": 1415,
+                "campaign_type_name": "Offset Test",
+                "total_slots": 2,
+                "number_of_campaigns": 0,
+                "used_slots": 0,
+                "available_slots": 2
+            }
         }
-    ],
-    "2024-10-04": [
-        ...
     ]
-    ...
 }
 ```
 [Top ↑](#campaign)
