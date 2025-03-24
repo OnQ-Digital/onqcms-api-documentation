@@ -320,9 +320,25 @@ Endpoint: https://onqcms.com/api/campaign/create
 | end_date_time       | datetime          | False     | validity end date time    |
 | selected_days       | array             | False      | mon, tue, wed, thu, fri, sat, sun |
 | content             | array             | True      | content ID in order       |
+| content_validity    | array             | True      | content validity          |
 | mediaplayer_id      | array             | False     | assigned media player ID  |
 | mediaplayer_category_id | array             | False     | Player Category ID        |
 | mediaplayer_tag_id      | array             | False     | Player Tag ID             |
+
+---
+
+*content_validity Parameters*
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| id                  | integer           | True      | content id                |
+| days                | string            | True      | mon, tue, wed, thu, fri, sat, sun |
+| valid_from_date     | datetime          | False     | validity from date        |
+| valid_from_time     | datetime          | False     | validity from time        |
+| valid_until_date    | array             | False     | validity until date       |
+| valid_until_time    | array             | True      | validity until time       |
+| tag_must_have       | array             | True      | tag must have             |
+| tag_any_these       | array             | False     | tag any these             |
+| tag_none_these      | array             | False     | tag none these            |
 
 `Request:`
 ```json
@@ -338,6 +354,36 @@ Endpoint: https://onqcms.com/api/campaign/create
       "start_date_time": "2024-10-01 09:00:00",
       "end_date_time": "2024-10-30 18:00:00",
       "content": [33361, 33362, 33363, 33369, 33370, 33371, 33374, 33375, 33376],
+      "content_validity": [
+                {
+                    "id": 33361,
+                    "days": ["mon", "wed", "fri"],
+                    "valid_from_date": "2024-11-11",
+                    "valid_from_time": "09:00:00",
+                    "valid_until_date": "2025-12-12",
+                    "valid_until_time": "19:00:00",
+                    "tag_must_have": [],
+                    "tag_any_these": [22, 223],
+                    "tag_none_these": []
+                },
+                {
+                    "id": 33362,
+                    "days": ["sun", "tue", "wed"],
+                    "valid_from_date": "2024-11-11",
+                    "valid_from_time": "09:10:00",
+                    "valid_until_date": "2025-12-12",
+                    "valid_until_time": "19:10:00",
+                    "tag_must_have": [4,4,4],
+                    "tag_any_these": [11, 112],
+                    "tag_none_these": [1,2,3]
+                },
+                {
+                    "id": 33363,
+                    "days": ["sun", "tue", "wed"],
+                    "valid_until_date": "2025-12-12",
+                    "valid_until_time": "19:10:00"
+                }
+            ],
       "mediaplayer_ids": [1144, 1153],
       "mediaplayer_category_id": [123, 111],
       "mediaplayer_tag_id": [222,333]
@@ -348,6 +394,36 @@ Endpoint: https://onqcms.com/api/campaign/create
       "start_date_time": "2024-10-02 13:00:00",
       "end_date_time": "2024-11-30 20:00:00",
       "content": [56260, 56261, 56262, 56263],
+      "content_validity": [
+                {
+                    "id": 56260,
+                    "days": ["mon", "wed", "fri"],
+                    "valid_from_date": "2024-11-11",
+                    "valid_from_time": "09:00:00",
+                    "valid_until_date": "2025-12-12",
+                    "valid_until_time": "19:00:00",
+                    "tag_must_have": [],
+                    "tag_any_these": [22, 223],
+                    "tag_none_these": []
+                },
+                {
+                    "id": 56261,
+                    "days": ["sun", "tue", "wed"],
+                    "valid_from_date": "2024-11-11",
+                    "valid_from_time": "09:10:00",
+                    "valid_until_date": "2025-12-12",
+                    "valid_until_time": "19:10:00",
+                    "tag_must_have": [4,4,4],
+                    "tag_any_these": [11, 112],
+                    "tag_none_these": [1,2,3]
+                },
+                {
+                    "id": 56262,
+                    "days": ["sun", "tue", "wed"],
+                    "valid_until_date": "2025-12-12",
+                    "valid_until_time": "19:10:00"
+                }
+            ],
       "mediaplayer_ids": [1415, 1416, 1417],
       "mediaplayer_category_id": [123, 111],
       "mediaplayer_tag_id": [222,333]
@@ -470,6 +546,62 @@ Endpoint: https://onqcms.com/api/campaign/fetch
             "fri",
             "sat",
             "sun"
+        ],
+         "content_validity": [
+            {
+                "id": 33361,
+                "days": [
+                    "mon",
+                    "wed",
+                    "fri"
+                ],
+                "tag_any_these": [
+                    22,
+                    223
+                ],
+                "tag_must_have": [],
+                "tag_none_these": [],
+                "valid_from_date": "2024-11-11",
+                "valid_from_time": "09:00:00",
+                "valid_until_date": "2025-12-12",
+                "valid_until_time": "19:00:00"
+            },
+            {
+                "id": 33362,
+                "days": [
+                    "sun",
+                    "tue",
+                    "wed"
+                ],
+                "tag_any_these": [
+                    11,
+                    112
+                ],
+                "tag_must_have": [
+                    4,
+                    4,
+                    4
+                ],
+                "tag_none_these": [
+                    1,
+                    2,
+                    3
+                ],
+                "valid_from_date": "2024-11-11",
+                "valid_from_time": "09:10:00",
+                "valid_until_date": "2025-12-12",
+                "valid_until_time": "19:10:00"
+            },
+            {
+                "id": 33363,
+                "days": [
+                    "sun",
+                    "tue",
+                    "wed"
+                ],
+                "valid_until_date": "2025-12-12",
+                "valid_until_time": "19:10:00"
+            }
         ],
         "start_date_time": "2025-01-01 00:00:00",
         "end_date_time": "2025-01-31 23:59:00",
