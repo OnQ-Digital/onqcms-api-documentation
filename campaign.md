@@ -1511,13 +1511,22 @@ The CMS expects an array of template structure objects as the input
 | Parameter           | Type              | Required  | Description               |
 |---------------------|-------------------|-----------|---------------------------|
 | categories          | array             | True      | Category key and array of values |
-| object_type         | string            | True      | 'player', 'playlist', 'asset', 'campaign' |
-| object_id           | integer           | True      | array of integers or strings |
+| object_type         | string            | False      | 'player', 'playlist', 'asset', 'campaign'. This must be supplied when object_id exist. |
+| object_id           | integer           | False      | array of integers or strings. This must be supplied when object_type exist.  |
 
 
 `Example request:`
 
 ```json
+{
+    "categories": [
+        { "key": "Client", "value": ["DJ-2"] },
+        { "key": "Type",   "value": ["Marketing"] },
+        { "key": "Region", "value": ["APAC", "MELBOURNE", "VICTORIA"] }
+    ]
+}
+
+--
 {
     "categories": [
         { "key": "Client", "value": ["DJ-2"] },
