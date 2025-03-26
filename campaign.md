@@ -1718,13 +1718,19 @@ The CMS expects an array of tag structure objects as the input
 | Parameter           | Type              | Required  | Description               |
 |---------------------|-------------------|-----------|---------------------------|
 | tag_name            | string            | True      | Tag name         |
-| object_type         | string            | True      | 'player', 'playlist', 'asset', 'campaign' |
-| object_id           | Array             | True      | array of strings          |
+| object_type         | string            | False      | 'player', 'playlist', 'asset', 'campaign'.This must be supplied when object_id exist. | |
+| object_id           | Array             | False      | array of strings. This must be supplied when object_type exist. |         |
 
 
 `Example request:`
 
 ```json
+{
+    "tag_name":"Hugo"
+}
+
+---
+
 {
     "tag_name":"Hugo",
     "object_type":"player",
