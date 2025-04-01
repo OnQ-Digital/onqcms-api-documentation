@@ -320,13 +320,29 @@ Endpoint: https://onqcms.com/api/campaign/create
 | end_date_time       | datetime          | False     | validity end date time    |
 | selected_days       | array             | False      | mon, tue, wed, thu, fri, sat, sun |
 | content             | array             | True      | content ID in order       |
+| schedules           | array             | False     | Schedules of this campaigns |
+| daily_time          | array             | False     | Daily play time of this campaign |
 | content_validity    | array             | True      | content validity          |
 | mediaplayer_id      | array             | False     | assigned media player ID  |
 | mediaplayer_category_id | array             | False     | Player Category ID        |
 | mediaplayer_tag_id      | array             | False     | Player Tag ID             |
 
 ---
+*schedules Parameters*
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| dow                 | string            | True      | mon, tue, wed, thu, fri, sat, sun |
+| after               | datetime          | False     | validity from date time  |
+| before              | datetime          | False     | validity until date time  |
 
+---
+*daily_time Parameters*
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| after               | time              | False     | validity from time        |
+| before              | time              | False     | validity until time       |
+
+---
 *content_validity Parameters*
 | Parameter           | Type              | Required  | Description               |
 |---------------------|-------------------|-----------|---------------------------|
@@ -354,6 +370,28 @@ Endpoint: https://onqcms.com/api/campaign/create
       "start_date_time": "2024-10-01 09:00:00",
       "end_date_time": "2024-10-30 18:00:00",
       "content": [33361, 33362, 33363, 33369, 33370, 33371, 33374, 33375, 33376],
+      "schedules": [
+                {
+                    "dow":["mon","wed","fri"],
+                    "after": "2024-10-01 09:01:00",
+                    "before": "2025-10-30 18:00:00"
+                },
+                {
+                    "dow":["mon","wed","fri"],
+                    "after": "2024-08-01 09:01:00",
+                    "before": null
+                }
+            ],
+      "daily_time": [
+                {
+                    "after": "09:00:00",
+                    "before": "11:00:00"
+                },
+                {
+                    "after": "13:00:00",
+                    "before": "18:00:00"
+                }
+            ], 
       "content_validity": [
                 {
                     "id": 33361,
@@ -394,6 +432,14 @@ Endpoint: https://onqcms.com/api/campaign/create
       "start_date_time": "2024-10-02 13:00:00",
       "end_date_time": "2024-11-30 20:00:00",
       "content": [56260, 56261, 56262, 56263],
+            "schedules": [
+                {
+                    "dow":["mon","tue","wed","thu","fri","sat","sun"],
+                    "after": null,
+                    "before": null
+                }
+            ],
+      "daily_time": null,
       "content_validity": [
                 {
                     "id": 56260,
@@ -962,6 +1008,7 @@ Endpoint: https://onqcms.com/api/campaign/edit
 | color_hex           | string            | True     | Campaign color code       |
 | campaign_sub        | array (campaign object) | True | List of campaign object  |
 
+---
 
 *Campaign_sub Parameters*
 | Parameter           | Type              | Required  | Description               |
@@ -970,11 +1017,43 @@ Endpoint: https://onqcms.com/api/campaign/edit
 | name                | string            | True      | division name             |
 | start_date_time     | datetime          | False     | validity start date time  |
 | end_date_time       | datetime          | False     | validity end date time    |
+| selected_days       | array             | False      | mon, tue, wed, thu, fri, sat, sun |
 | content             | array             | True      | content ID in order       |
-| mediaplayer_ids      | array             | True     | assigned media player ID  |
-| tag_campaign_ids      | array             | True     | assigned media player ID  |
-| category_campaign_ids | array             | True     | assigned media player ID  |
-| category_client_ids   | array             | True     | assigned media player ID  |
+| schedules           | array             | False     | Schedules of this campaigns |
+| daily_time          | array             | False     | Daily play time of this campaign |
+| content_validity    | array             | True      | content validity          |
+| mediaplayer_id      | array             | False     | assigned media player ID  |
+| mediaplayer_category_id | array             | False     | Player Category ID        |
+| mediaplayer_tag_id      | array             | False     | Player Tag ID             |
+
+---
+*schedules Parameters*
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| dow                 | string            | True      | mon, tue, wed, thu, fri, sat, sun |
+| after               | datetime          | False     | validity from date time  |
+| before              | datetime          | False     | validity until date time  |
+
+---
+*daily_time Parameters*
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| after               | time              | False     | validity from time        |
+| before              | time              | False     | validity until time       |
+
+---
+*content_validity Parameters*
+| Parameter           | Type              | Required  | Description               |
+|---------------------|-------------------|-----------|---------------------------|
+| id                  | integer           | True      | content id                |
+| days                | string            | True      | mon, tue, wed, thu, fri, sat, sun |
+| valid_from_date     | datetime          | False     | validity from date        |
+| valid_from_time     | datetime          | False     | validity from time        |
+| valid_until_date    | array             | False     | validity until date       |
+| valid_until_time    | array             | True      | validity until time       |
+| tag_must_have       | array             | True      | tag must have             |
+| tag_any_these       | array             | False     | tag any these             |
+| tag_none_these      | array             | False     | tag none these            |
 
 To remove start_data, start_time, end_date and end_time values, set empty value for the key. Any unset key will keep existing values.
 
@@ -993,6 +1072,58 @@ To remove start_data, start_time, end_date and end_time values, set empty value 
       "start_date_time": "2024-10-01 09:00:00",
       "end_date_time": "2024-10-30 18:00:00",
       "content": [33361, 33362, 33363, 33369, 33370, 33371, 33374, 33375, 33376],
+      "schedules": [
+                {
+                    "dow":["mon","wed","fri"],
+                    "after": "2024-10-01 09:01:00",
+                    "before": "2025-10-30 18:00:00"
+                },
+                {
+                    "dow":["mon","wed","fri"],
+                    "after": "2024-08-01 09:01:00",
+                    "before": null
+                }
+            ],
+      "daily_time": [
+                {
+                    "after": "09:00:00",
+                    "before": "11:00:00"
+                },
+                {
+                    "after": "13:00:00",
+                    "before": "18:00:00"
+                }
+            ], 
+      "content_validity": [
+                {
+                    "id": 33361,
+                    "days": ["mon", "wed", "fri"],
+                    "valid_from_date": "2024-11-11",
+                    "valid_from_time": "09:00:00",
+                    "valid_until_date": "2025-12-12",
+                    "valid_until_time": "19:00:00",
+                    "tag_must_have": [],
+                    "tag_any_these": [22, 223],
+                    "tag_none_these": []
+                },
+                {
+                    "id": 33362,
+                    "days": ["sun", "tue", "wed"],
+                    "valid_from_date": "2024-11-11",
+                    "valid_from_time": "09:10:00",
+                    "valid_until_date": "2025-12-12",
+                    "valid_until_time": "19:10:00",
+                    "tag_must_have": [4,4,4],
+                    "tag_any_these": [11, 112],
+                    "tag_none_these": [1,2,3]
+                },
+                {
+                    "id": 33363,
+                    "days": ["sun", "tue", "wed"],
+                    "valid_until_date": "2025-12-12",
+                    "valid_until_time": "19:10:00"
+                }
+            ],
       "mediaplayer_ids": [1144, 1153],
       "mediaplayer_category_id": [111,222],
       "mediaplayer_tag_id": [123,345],
@@ -1006,6 +1137,45 @@ To remove start_data, start_time, end_date and end_time values, set empty value 
       "start_date_time": "2024-10-02 13:00:00",
       "end_date_time": "2024-11-30 20:00:00",
       "content": [56260, 56261, 56262, 56263],
+            "content": [56260, 56261, 56262, 56263],
+            "schedules": [
+                {
+                    "dow":["mon","tue","wed","thu","fri","sat","sun"],
+                    "after": null,
+                    "before": null
+                }
+            ],
+      "daily_time": null,
+      "content_validity": [
+                {
+                    "id": 56260,
+                    "days": ["mon", "wed", "fri"],
+                    "valid_from_date": "2024-11-11",
+                    "valid_from_time": "09:00:00",
+                    "valid_until_date": "2025-12-12",
+                    "valid_until_time": "19:00:00",
+                    "tag_must_have": [],
+                    "tag_any_these": [22, 223],
+                    "tag_none_these": []
+                },
+                {
+                    "id": 56261,
+                    "days": ["sun", "tue", "wed"],
+                    "valid_from_date": "2024-11-11",
+                    "valid_from_time": "09:10:00",
+                    "valid_until_date": "2025-12-12",
+                    "valid_until_time": "19:10:00",
+                    "tag_must_have": [4,4,4],
+                    "tag_any_these": [11, 112],
+                    "tag_none_these": [1,2,3]
+                },
+                {
+                    "id": 56262,
+                    "days": ["sun", "tue", "wed"],
+                    "valid_until_date": "2025-12-12",
+                    "valid_until_time": "19:10:00"
+                }
+            ],
       "mediaplayer_ids": [1415, 1416, 1417],
       "mediaplayer_category_id": [111,222],
       "mediaplayer_tag_id": [123,345],
