@@ -515,9 +515,53 @@ Endpoint: https://onqcms.com/api/campaign/create
 - Status: 400 Bad Request
 ```json
 {
-  "error": "Invalid input data"
+  "error": "Failed to book campaign"
 }
 ```
+
+```json
+{
+  "campaign": [
+    {
+      "sub_id": 1478,
+      "campaign_id": 453,
+      "company_group_id": 3,
+      "campaign_thumb_name": "3-237-1651629762-74e0412-thumb.jpg",
+      "name": "dsfdsffd",
+      "is_draft": 0,
+      "sub_order": 1,
+      "sub_name": "dsfdsdffd",
+      "playlist_content": [
+        33361,
+        33362,
+        33363,
+        33371,
+        33374,
+        33375,
+        33376
+      ],
+      "status": "live",
+      "start_date_time": "2024-10-01 09:01:00",
+      "end_date_time": "2025-10-30 18:00:00",
+      "total_assignments": 2,
+      "createdAt": "2025-04-09 20:11:14",
+      "updatedAt": "2025-04-09 20:11:14"
+    }
+  ],
+  "error": { // This key is only set if one of collision or expired_players 
+    "collision": [ // This both key and value present when there is collision campaign
+      "DJ Campaign 1 - Collision: Overlapping time on mon, wed, fri between 09:00:00-11:00:00 and 09:00:00-11:00:00 within date range 2024-10-01 to 2025-10-30.",
+      "dsfdsffd - Collision: Overlapping time on mon, wed, fri between 09:00:00-11:00:00 and 09:00:00-11:00:00 within date range 2024-10-01 to 2025-10-30."
+    ],
+    "expired_players": [ // This both key and value present when there is license expired players
+      "player-111",
+      "player-222",
+      "player-333"
+    ]
+  }
+}
+```
+
 [Top ↑](#campaign)
 
 ## 2.2. Fetch campaigns
@@ -1191,17 +1235,33 @@ To remove start_data, start_time, end_date and end_time values, set empty value 
 - Satus: 200 OK
 ```json
 {
-  "campaign_id": 12,
-  "company_group_id": 1,
-  "name": "New Updated Campaign",
-  "campaign_type_id": 2,
-  "asset_folder_id": 5,
-  "start_date": "2024-10-01",
-  "start_time": "090000",
-  "end_date": "2024-10-30",
-  "end_time": "180000",
-  "createdAt": "2024-10-01T10:00:00.000Z",
-  "updatedAt": "2024-10-05T12:00:00.000Z"
+    "campaign": 
+    [
+        {
+          "campaign_id": 12,
+          "company_group_id": 1,
+          "name": "New Updated Campaign",
+          "campaign_type_id": 2,
+          "asset_folder_id": 5,
+          "start_date": "2024-10-01",
+          "start_time": "090000",
+          "end_date": "2024-10-30",
+          "end_time": "180000",
+          "createdAt": "2024-10-01T10:00:00.000Z",
+          "updatedAt": "2024-10-05T12:00:00.000Z"
+        }
+    ],
+    "error": { // This key is only set if one of collision or expired_players 
+        "collision": [ // This both key and value present when there is collision campaign
+        "DJ Campaign 1 - Collision: Overlapping time on mon, wed, fri between 09:00:00-11:00:00 and 09:00:00-11:00:00 within date range 2024-10-01 to 2025-10-30.",
+        "dsfdsffd - Collision: Overlapping time on mon, wed, fri between 09:00:00-11:00:00 and 09:00:00-11:00:00 within date range 2024-10-01 to 2025-10-30."
+        ],
+        "expired_players": [ // This both key and value present when there is license expired players
+        "player-111",
+        "player-222",
+        "player-333"
+        ]
+  }
 }
 ```
 
@@ -1209,7 +1269,17 @@ To remove start_data, start_time, end_date and end_time values, set empty value 
 - Status: 404 Not Found
 ```json
 {
-  "error": "Campaign not found"
+  "error": { // This key is only set if one of collision or expired_players 
+    "collision": [ // This both key and value present when there is collision campaign
+      "DJ Campaign 1 - Collision: Overlapping time on mon, wed, fri between 09:00:00-11:00:00 and 09:00:00-11:00:00 within date range 2024-10-01 to 2025-10-30.",
+      "dsfdsffd - Collision: Overlapping time on mon, wed, fri between 09:00:00-11:00:00 and 09:00:00-11:00:00 within date range 2024-10-01 to 2025-10-30."
+    ],
+    "expired_players": [ // This both key and value present when there is license expired players
+      "player-111",
+      "player-222",
+      "player-333"
+    ]
+  }
 }
 ```
 
