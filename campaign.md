@@ -319,10 +319,8 @@ Endpoint: https://onqcms.com/api/campaign/create
 | start_date_time     | datetime          | False     | validity start date time  |
 | end_date_time       | datetime          | False     | validity end date time    |
 | selected_days       | array             | False      | mon, tue, wed, thu, fri, sat, sun |
-| content             | array             | True      | content ID in order       |
+| content             | array             | True      | content objects       |
 | schedules           | array             | False     | Schedules of this campaigns |
-| daily_time          | array             | False     | Daily play time of this campaign |
-| content_validity    | array             | True      | content validity          |
 | mediaplayer_id      | array             | False     | assigned media player ID  |
 | mediaplayer_category_id | array             | False     | Player Category ID        |
 | mediaplayer_tag_id      | array             | False     | Player Tag ID             |
@@ -334,6 +332,7 @@ Endpoint: https://onqcms.com/api/campaign/create
 | dow                 | string            | True      | mon, tue, wed, thu, fri, sat, sun |
 | after               | datetime          | False     | validity from date time  |
 | before              | datetime          | False     | validity until date time  |
+| daily_times         | array             | False     | Daily play time of this campaign |
 
 ---
 *daily_time Parameters*
@@ -343,15 +342,11 @@ Endpoint: https://onqcms.com/api/campaign/create
 | before              | time              | False     | validity until time       |
 
 ---
-*content_validity Parameters*
+*content Parameters*
 | Parameter           | Type              | Required  | Description               |
 |---------------------|-------------------|-----------|---------------------------|
 | id                  | integer           | True      | content id                |
-| days                | string            | True      | mon, tue, wed, thu, fri, sat, sun |
-| valid_from_date     | datetime          | False     | validity from date        |
-| valid_from_time     | datetime          | False     | validity from time        |
-| valid_until_date    | array             | False     | validity until date       |
-| valid_until_time    | array             | True      | validity until time       |
+| schedules           | array             | True      | Schedules the content is valid for |
 | tag_must_have       | array             | True      | tag must have             |
 | tag_any_these       | array             | False     | tag any these             |
 | tag_none_these      | array             | False     | tag none these            |
@@ -369,12 +364,21 @@ Endpoint: https://onqcms.com/api/campaign/create
       "name": "division 1",
       "start_date_time": "2024-10-01 09:00:00",
       "end_date_time": "2024-10-30 18:00:00",
-      "content": [33361, 33362, 33363, 33369, 33370, 33371, 33374, 33375, 33376],
       "schedules": [
                 {
                     "dow":["mon","wed","fri"],
                     "after": "2024-10-01 09:01:00",
-                    "before": "2025-10-30 18:00:00"
+                    "before": "2025-10-30 18:00:00", 
+                    "daily_times": [
+                        {
+                            "after": "09:00:00",
+                            "before": "11:00:00"
+                        },
+                        {
+                            "after": "13:00:00",
+                            "before": "18:00:00"
+                        }
+                    ], 
                 },
                 {
                     "dow":["mon","wed","fri"],
@@ -382,44 +386,43 @@ Endpoint: https://onqcms.com/api/campaign/create
                     "before": null
                 }
             ],
-      "daily_time": [
-                {
-                    "after": "09:00:00",
-                    "before": "11:00:00"
-                },
-                {
-                    "after": "13:00:00",
-                    "before": "18:00:00"
-                }
-            ], 
-      "content_validity": [
+      "content": [
                 {
                     "id": 33361,
-                    "days": ["mon", "wed", "fri"],
-                    "valid_from_date": "2024-11-11",
-                    "valid_from_time": "09:00:00",
-                    "valid_until_date": "2025-12-12",
-                    "valid_until_time": "19:00:00",
+                    "schedules":[
+                        {
+                            "dow":["mon","wed","fri"],
+                            "after": "2024-10-01 09:01:00",
+                            "before": "2025-10-30 18:00:00",
+                            "daily_times": [
+                                {
+                                    "after": "09:00:00",
+                                    "before": "11:00:00"
+                                },
+                                {
+                                    "after": "13:00:00",
+                                    "before": "18:00:00"
+                                }
+                            ], 
+                        },
+                        {
+                            "dow":["mon","wed","fri"],
+                            "after": "2024-08-01 09:01:00",
+                            "before": null
+                        }
+                    ],
                     "tag_must_have": [],
                     "tag_any_these": [22, 223],
                     "tag_none_these": []
                 },
                 {
                     "id": 33362,
-                    "days": ["sun", "tue", "wed"],
-                    "valid_from_date": "2024-11-11",
-                    "valid_from_time": "09:10:00",
-                    "valid_until_date": "2025-12-12",
-                    "valid_until_time": "19:10:00",
                     "tag_must_have": [4,4,4],
                     "tag_any_these": [11, 112],
                     "tag_none_these": [1,2,3]
                 },
                 {
                     "id": 33363,
-                    "days": ["sun", "tue", "wed"],
-                    "valid_until_date": "2025-12-12",
-                    "valid_until_time": "19:10:00"
                 }
             ],
       "mediaplayer_ids": [1144, 1153],
@@ -431,43 +434,22 @@ Endpoint: https://onqcms.com/api/campaign/create
       "name": "division 2",
       "start_date_time": "2024-10-02 13:00:00",
       "end_date_time": "2024-11-30 20:00:00",
-      "content": [56260, 56261, 56262, 56263],
-            "schedules": [
-                {
-                    "dow":["mon","tue","wed","thu","fri","sat","sun"],
-                    "after": null,
-                    "before": null
-                }
-            ],
-      "daily_time": null,
-      "content_validity": [
+        "schedules": [
+            {
+                "dow":["mon","tue","wed","thu","fri","sat","sun"],
+                "after": null,
+                "before": null
+            }
+        ],
+      "content": [
                 {
                     "id": 56260,
-                    "days": ["mon", "wed", "fri"],
-                    "valid_from_date": "2024-11-11",
-                    "valid_from_time": "09:00:00",
-                    "valid_until_date": "2025-12-12",
-                    "valid_until_time": "19:00:00",
-                    "tag_must_have": [],
-                    "tag_any_these": [22, 223],
-                    "tag_none_these": []
                 },
                 {
                     "id": 56261,
-                    "days": ["sun", "tue", "wed"],
-                    "valid_from_date": "2024-11-11",
-                    "valid_from_time": "09:10:00",
-                    "valid_until_date": "2025-12-12",
-                    "valid_until_time": "19:10:00",
-                    "tag_must_have": [4,4,4],
-                    "tag_any_these": [11, 112],
-                    "tag_none_these": [1,2,3]
                 },
                 {
                     "id": 56262,
-                    "days": ["sun", "tue", "wed"],
-                    "valid_until_date": "2025-12-12",
-                    "valid_until_time": "19:10:00"
                 }
             ],
       "mediaplayer_ids": [1415, 1416, 1417],
@@ -609,421 +591,58 @@ Endpoint: https://onqcms.com/api/campaign/fetch
     ],
     "include_detail": false,
     "by_group": 1,
+    "campaign_sub":[
+        {
+            "campaign_id": 7,
+            "company_group_id": 3,
+            "name": "Sub-Campaign 01",
+            "schedules": [
+                {
+                    "dow":["mon","tue","wed","thu","fri","sat","sun"],
+                    "before":null,
+                    "after":null,
+                }
+            ],
+            "content": [
+                {
+                    "id": 33361,
+                    
+                    "tag_any_these": [
+                        22,
+                        223
+                    ],
+                    "tag_must_have": [],
+                    "tag_none_these": [],
+                },
+                {
+                    "id": 33362,
+                    "tag_any_these": [
+                        11,
+                        112
+                    ],
+                    "tag_must_have": [
+                        4,
+                        4,
+                        4
+                    ],
+                    "tag_none_these": [
+                        1,
+                        2,
+                        3
+                    ],
+                },
+                {
+                    "id": 33363,
+                }
+            ],
+            "mediaplayers": [],
+            "mediaplayers_by_tag": [],
+            "mediaplayers_by_cat": [],
+            "createdAt": "2025-01-06 10:40:59",
+            "updatedAt": "2025-01-06 10:40:59"
+        }
+    ]
 }
-```
-`Success Response:`
-- Status: 200 OK
-```json
-// example response, when "include_detail: false" in the request
-[
-    {
-        "campaign_id": 7,
-        "company_group_id": 3,
-        "name": "Campaign 01",
-        "asset_folder_id": 1882,
-        "color_hex": "#8482d8",
-        "is_draft": 0,
-        "num_slots": 1,
-        "asset_per_loop": 1,
-        "fill_empty_slot": 1,
-        "fill_cond_limit": 2,
-        "fill_cond_slot": 2,
-        "selected_days": [
-            "mon",
-            "tue",
-            "wed",
-            "thu",
-            "fri",
-            "sat",
-            "sun"
-        ],
-         "content_validity": [
-            {
-                "id": 33361,
-                "days": [
-                    "mon",
-                    "wed",
-                    "fri"
-                ],
-                "tag_any_these": [
-                    22,
-                    223
-                ],
-                "tag_must_have": [],
-                "tag_none_these": [],
-                "valid_from_date": "2024-11-11",
-                "valid_from_time": "09:00:00",
-                "valid_until_date": "2025-12-12",
-                "valid_until_time": "19:00:00"
-            },
-            {
-                "id": 33362,
-                "days": [
-                    "sun",
-                    "tue",
-                    "wed"
-                ],
-                "tag_any_these": [
-                    11,
-                    112
-                ],
-                "tag_must_have": [
-                    4,
-                    4,
-                    4
-                ],
-                "tag_none_these": [
-                    1,
-                    2,
-                    3
-                ],
-                "valid_from_date": "2024-11-11",
-                "valid_from_time": "09:10:00",
-                "valid_until_date": "2025-12-12",
-                "valid_until_time": "19:10:00"
-            },
-            {
-                "id": 33363,
-                "days": [
-                    "sun",
-                    "tue",
-                    "wed"
-                ],
-                "valid_until_date": "2025-12-12",
-                "valid_until_time": "19:10:00"
-            }
-        ],
-        "start_date_time": "2025-01-01 00:00:00",
-        "end_date_time": "2025-01-31 23:59:00",
-        "status": "live",
-        "total_campaign_sub": 2,
-        "total_assignments": 3,
-        "total_players": 2,
-        "total_campaign_player_cats": 2,
-        "total_campaign_player_tags": 2,
-        "campaign_thumb_name": "3-457-1715297080-0a86dc5-thumb.jpg",
-        "tag_campaign_ids": [
-            151
-        ],
-        "category_clients": [
-            {
-                "smart_categories_object_id": "7",
-                "smart_categories_id": 1,
-                "smart_categories_value": "ISSEY MIYAKE"
-            }
-        ],
-        "category_client_ids": [
-            1
-        ],
-        "category_client_name": "ISSEY MIYAKE",
-        "mediaplayers": [],
-        "mediaplayers_by_tag": [],
-        "mediaplayers_by_cat": [],
-        "createdAt": "2025-01-06 10:40:59",
-        "updatedAt": "2025-01-06 10:40:59"
-    }
-]
-```
-
-```json
-// example response, when "include_detail: true" in the request
-[
-    {
-        "campaign_id": 7,
-        "company_group_id": 3,
-        "name": "Campaign 01",
-        "asset_folder_id": 1882,
-        "color_hex": "#8482d8",
-        "is_draft": 0,
-        "num_slots": 1,
-        "asset_per_loop": 1,
-        "fill_empty_slot": 1,
-        "fill_cond_limit": 2,
-        "fill_cond_slot": 2,
-        "selected_days": [
-            "mon",
-            "tue",
-            "wed",
-            "thu",
-            "fri",
-            "sat",
-            "sun"
-        ],
-        "start_date_time": "2025-01-01 00:00:00",
-        "end_date_time": "2025-01-31 23:59:00",
-        "status": "live",
-        "total_campaign_sub": 2,
-        "total_assignments": 3,
-        "total_players": 2,
-        "total_campaign_player_cats": 2,
-        "total_campaign_player_tags": 2,
-        "campaign_thumb_name": "3-457-1715297080-0a86dc5-thumb.jpg",
-        "tag_campaign_ids": [
-            151
-        ],
-        "category_clients": [
-            {
-                "smart_categories_object_id": "7",
-                "smart_categories_id": 1,
-                "smart_categories_value": "ISSEY MIYAKE"
-            }
-        ],
-        "category_client_ids": [
-            1
-        ],
-        "category_client_name": "ISSEY MIYAKE",
-        "mediaplayers": [
-            {
-                "campaign_id": 7,
-                "mediaplayer_id": 1144,
-                "mediaplayer_name": "a-frame"
-            },
-            {
-                "campaign_id": 7,
-                "mediaplayer_id": 1415,
-                "mediaplayer_name": "Offset Test"
-            }
-        ],
-        "mediaplayers_by_tag": [
-            {
-                "campaign_id": 7,
-                "mediaplayer_id": 1153,
-                "mediaplayer_name": "API Test 1",
-                "tag_id": 150,
-                "tag_name": "Group 1"
-            },
-            {
-                "campaign_id": 7,
-                "mediaplayer_id": 1416,
-                "mediaplayer_name": "API Test 2",
-                "tag_id": 152,
-                "tag_name": "Group 2"
-            }
-        ],
-        "mediaplayers_by_cat": [
-            {
-                "campaign_id": 7,
-                "mediaplayer_id": 1153,
-                "mediaplayer_name": "API Test 1",
-                "smart_categories_id": 3,
-                "smart_categories_key": "location",
-                "smart_categories_value": "melbourne"
-            },
-            {
-                "campaign_id": 7,
-                "mediaplayer_id": 1416,
-                "mediaplayer_name": "API Test 2",
-                "smart_categories_id": 4,
-                "smart_categories_key": "type",
-                "smart_categories_value": "marketing"
-            }
-        ],
-        "createdAt": "2025-01-06 10:40:59",
-        "updatedAt": "2025-01-06 10:40:59"
-    }
-]
-```
-
-### 2.2.2. Fetch a campaign with sub divisions (campaigns)
-`Request:`
-```json
-{
-    "company_group_id": 3,
-    "campaign_id": 49,
-    "start_date_time": "2024-01-02 00:00:00",
-    "end_date_time": "2024-12-02 23:59:59",
-    "min_booking": null,
-    "max_booking": null,
-    "campaign_statuses": ["live","finished"],
-    "mediaplayer_ids": [36],
-    "by_group": 0
-}
-```
-`Success Response:`
-
-- Status: 200 OK
-```json
-[
-    {
-        "campaign_id": 9,
-        "company_group_id": 3,
-        "name": "DJ Campaign",
-        "sub_order": 1,
-        "sub_name": "division 1",
-        "playlist_content": [
-            33361,
-            33362,
-            33363,
-            33369,
-            33370,
-            33371,
-            33374,
-            33375,
-            33376
-        ],
-        "status": "finished",
-        "start_date_time": "2024-10-01 09:00:00",
-        "end_date_time": "2024-10-30 18:00:00",
-        "total_assignments": 6,
-        "createdAt": "2024-10-31 14:57:53",
-        "updatedAt": "2024-10-31 14:57:53"
-    },
-    {
-        "campaign_id": 9,
-        "company_group_id": 3,
-        "name": "DJ Campaign",
-        "sub_order": 2,
-        "sub_name": "division 2",
-        "playlist_content": [
-            56260,
-            56261,
-            56262,
-            56263
-        ],
-        "status": "live",
-        "start_date_time": "2024-10-02 13:00:00",
-        "end_date_time": "2024-11-30 20:00:00",
-        "total_assignments": 5,
-        "createdAt": "2024-10-31 14:57:53",
-        "updatedAt": "2024-10-31 14:57:53"
-    }
-]
-```
-
-### 2.2.3. Fetch a campaign detail with campaign ID
-`Request:`
-```json
-{
-    "company_group_id": 3,
-    "campaign_id": 49,
-    "start_date_time": "2024-01-02 00:00:00",
-    "end_date_time": "2024-12-02 23:59:59",
-    "min_booking": null,
-    "max_booking": null,
-    "campaign_statuses": ["live","finished"],
-    "mediaplayer_ids": [36],
-    "by_group": 0
-}
-```
-`Success Response:`
-
-- Status: 200 OK
-```json
-[
-    {
-        "campaign_id": 171,
-        "campaign_name": "DJ Campaign 1",
-        "asset_folder_id": 503,
-        "color_hex": "#aadd33",
-        "campaign_sub_id": 76,
-        "campaign_sub_name": "dj division 1",
-        "campaign_sub_order": 1,
-        "playlist_content": [
-            33361,
-            33362,
-        ],
-        "playlist_thumbs": {
-            "33361": {
-                "file_title": "CR_May22_MumDay_1920x1080px_10.jpg",
-                "file_thumb": "3-237-1651629762-74e0412-thumb.jpg"
-            },
-            "33362": {
-                "file_title": "CR_May22_MumDay_1920x1080px_11.jpg",
-                "file_thumb": "3-237-1651629763-304480f-thumb.jpg"
-            }
-        },
-        "start_date_time": "2024-10-01 09:00:00",
-        "end_date_time": "2024-10-30 18:00:00",
-        "selected_days": [
-            "wed",
-            "thu",
-            "fri"
-        ],
-        "created_at": "2024-12-12 09:41:57",
-        "updated_at": "2024-12-12 09:41:57",
-        "mediaplayer_ids": [
-            1144,
-            1153
-        ],
-        "mediaplayer_cat_ids": [
-          111,
-          222
-        ],
-        "mediaplayer_tag_ids": [
-          123,
-          345
-        ],
-        "tag_campaign_ids": [],
-        "category_campaign_ids": [
-            162
-        ],
-        "category_client_ids": [
-            162
-        ]
-    },
-    {
-        "campaign_id": 171,
-        "campaign_name": "DJ Campaign 1",
-        "asset_folder_id": 503,
-        "color_hex": "#aadd33",
-        "campaign_sub_id": 77,
-        "campaign_sub_name": "dj division 2",
-        "campaign_sub_order": 2,
-        "playlist_content": [
-            56260,
-            56261,
-            56262,
-            56263
-        ],
-        "playlist_thumbs": {
-            "56260": {
-                "file_title": "Demo Move.mp4",
-                "file_thumb": "3-474-1713752722-7b76837-thumb.jpeg"
-            },
-            "56261": {
-                "file_title": "Demo Move.mp4",
-                "file_thumb": "3-474-1713753413-7b76837-thumb.jpeg"
-            },
-            "56262": {
-                "file_title": "Demo Move.mp4",
-                "file_thumb": "3-474-1713753562-7b76837-thumb.jpeg"
-            },
-            "56263": {
-                "file_title": "Demo\nMove.mp4",
-                "file_thumb": "3-474-1713753605-7b76837-thumb.jpeg"
-            }
-        },
-        "start_date_time": null,
-        "end_date_time": null,
-        "created_at": "2024-12-12 09:41:57",
-        "updated_at": "2024-12-12 09:41:57",
-        "selected_days": [
-            "wed",
-            "thu",
-            "fri"
-        ],
-        "mediaplayer_ids": [
-            1413,
-            1438,
-            1439
-        ],
-        "mediaplayer_cat_ids": [
-          111,
-          222
-        ],
-        "mediaplayer_tag_ids": [
-          123,
-          345
-        ],
-        "tag_campaign_ids": [],
-        "category_campaign_ids": [
-            162
-        ],
-        "category_client_ids": [
-            162
-        ]
-    }
-]
 ```
 
 `Error Response:`
@@ -1235,22 +854,132 @@ To remove start_data, start_time, end_date and end_time values, set empty value 
 - Satus: 200 OK
 ```json
 {
-    "campaign": 
-    [
-        {
-          "campaign_id": 12,
-          "company_group_id": 1,
-          "name": "New Updated Campaign",
-          "campaign_type_id": 2,
-          "asset_folder_id": 5,
-          "start_date": "2024-10-01",
-          "start_time": "090000",
-          "end_date": "2024-10-30",
-          "end_time": "180000",
-          "createdAt": "2024-10-01T10:00:00.000Z",
-          "updatedAt": "2024-10-05T12:00:00.000Z"
-        }
-    ],
+    "campaign": {
+        "company_group_id": 3,
+        "campaign_id": 12,
+        "name": "DJ Campaign",
+        "asset_folder_id": 503,
+        "color_hex": "#ff88dd",
+        "campaign_sub": [
+            {
+            "order": 1,
+            "name": "division 1",
+            "start_date_time": "2024-10-01 09:00:00",
+            "end_date_time": "2024-10-30 18:00:00",
+            "content": [33361, 33362, 33363, 33369, 33370, 33371, 33374, 33375, 33376],
+            "schedules": [
+                        {
+                            "dow":["mon","wed","fri"],
+                            "after": "2024-10-01 09:01:00",
+                            "before": "2025-10-30 18:00:00"
+                        },
+                        {
+                            "dow":["mon","wed","fri"],
+                            "after": "2024-08-01 09:01:00",
+                            "before": null
+                        }
+                    ],
+            "daily_time": [
+                        {
+                            "after": "09:00:00",
+                            "before": "11:00:00"
+                        },
+                        {
+                            "after": "13:00:00",
+                            "before": "18:00:00"
+                        }
+                    ], 
+            "content_validity": [
+                        {
+                            "id": 33361,
+                            "days": ["mon", "wed", "fri"],
+                            "valid_from_date": "2024-11-11",
+                            "valid_from_time": "09:00:00",
+                            "valid_until_date": "2025-12-12",
+                            "valid_until_time": "19:00:00",
+                            "tag_must_have": [],
+                            "tag_any_these": [22, 223],
+                            "tag_none_these": []
+                        },
+                        {
+                            "id": 33362,
+                            "days": ["sun", "tue", "wed"],
+                            "valid_from_date": "2024-11-11",
+                            "valid_from_time": "09:10:00",
+                            "valid_until_date": "2025-12-12",
+                            "valid_until_time": "19:10:00",
+                            "tag_must_have": [4,4,4],
+                            "tag_any_these": [11, 112],
+                            "tag_none_these": [1,2,3]
+                        },
+                        {
+                            "id": 33363,
+                            "days": ["sun", "tue", "wed"],
+                            "valid_until_date": "2025-12-12",
+                            "valid_until_time": "19:10:00"
+                        }
+                    ],
+            "mediaplayer_ids": [1144, 1153],
+            "mediaplayer_category_id": [111,222],
+            "mediaplayer_tag_id": [123,345],
+            "tag_campaign_ids": [],
+            "category_campaign_ids": [152],
+            "category_client_ids": [162]
+            },
+            {
+            "order": 2,
+            "name": "division 2",
+            "start_date_time": "2024-10-02 13:00:00",
+            "end_date_time": "2024-11-30 20:00:00",
+            "content": [56260, 56261, 56262, 56263],
+                    "content": [56260, 56261, 56262, 56263],
+                    "schedules": [
+                        {
+                            "dow":["mon","tue","wed","thu","fri","sat","sun"],
+                            "after": null,
+                            "before": null
+                        }
+                    ],
+            "daily_time": null,
+            "content_validity": [
+                        {
+                            "id": 56260,
+                            "days": ["mon", "wed", "fri"],
+                            "valid_from_date": "2024-11-11",
+                            "valid_from_time": "09:00:00",
+                            "valid_until_date": "2025-12-12",
+                            "valid_until_time": "19:00:00",
+                            "tag_must_have": [],
+                            "tag_any_these": [22, 223],
+                            "tag_none_these": []
+                        },
+                        {
+                            "id": 56261,
+                            "days": ["sun", "tue", "wed"],
+                            "valid_from_date": "2024-11-11",
+                            "valid_from_time": "09:10:00",
+                            "valid_until_date": "2025-12-12",
+                            "valid_until_time": "19:10:00",
+                            "tag_must_have": [4,4,4],
+                            "tag_any_these": [11, 112],
+                            "tag_none_these": [1,2,3]
+                        },
+                        {
+                            "id": 56262,
+                            "days": ["sun", "tue", "wed"],
+                            "valid_until_date": "2025-12-12",
+                            "valid_until_time": "19:10:00"
+                        }
+                    ],
+            "mediaplayer_ids": [1415, 1416, 1417],
+            "mediaplayer_category_id": [111,222],
+            "mediaplayer_tag_id": [123,345],
+            "tag_campaign_ids": [],
+            "category_campaign_ids": [162],
+            "category_client_ids": [162]
+            }
+        ]
+    },
     "error": { // This key is only set if one of collision or expired_players 
         "collision": [ // This both key and value present when there is collision campaign
         "DJ Campaign 1 - Collision: Overlapping time on mon, wed, fri between 09:00:00-11:00:00 and 09:00:00-11:00:00 within date range 2024-10-01 to 2025-10-30.",
@@ -1261,24 +990,6 @@ To remove start_data, start_time, end_date and end_time values, set empty value 
         "player-222",
         "player-333"
         ]
-  }
-}
-```
-
-`Error Response:`
-- Status: 404 Not Found
-```json
-{
-  "error": { // This key is only set if one of collision or expired_players 
-    "collision": [ // This both key and value present when there is collision campaign
-      "DJ Campaign 1 - Collision: Overlapping time on mon, wed, fri between 09:00:00-11:00:00 and 09:00:00-11:00:00 within date range 2024-10-01 to 2025-10-30.",
-      "dsfdsffd - Collision: Overlapping time on mon, wed, fri between 09:00:00-11:00:00 and 09:00:00-11:00:00 within date range 2024-10-01 to 2025-10-30."
-    ],
-    "expired_players": [ // This both key and value present when there is license expired players
-      "player-111",
-      "player-222",
-      "player-333"
-    ]
   }
 }
 ```
