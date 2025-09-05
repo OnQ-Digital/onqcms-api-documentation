@@ -27,3 +27,4 @@ Requests to the OnQ CMS must be authenticated with a valid token generated in **
 - [Playlist](playlist.md)
 - [Report](report.md)
 - [Campaign](campaign.md)
+- [Seedooh Integration](seedooh.md)
