@@ -70,6 +70,7 @@ Retrieves campaign data with creative schedules and metadata. Supports active ca
 | campaign_categories | array | Campaign categories |
 | campaign_creative_schedules | array | Creative schedule objects |
 | seedooh_verified | boolean | Seedooh verification status |
+| filter_request_data | object | Filter data structure for playlogs generation |
 
 ### Creative Schedule Object
 
@@ -86,6 +87,24 @@ Retrieves campaign data with creative schedules and metadata. Supports active ca
 | saturation_frequency | integer | Frequency per loop |
 | purchase_type | string | Purchase type (e.g., "Paid") |
 | player_ids | array | Array of player IDs |
+| campaign_sub_id | integer | Campaign sub ID for playlist identification |
+
+### Filter Request Data Object
+
+The `filter_request_data` object provides the exact structure needed for playlogs generation requests:
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| record_output_type | object | Output type configuration |
+| record_output_type.Seedooh | integer | Campaign ID for Seedooh integration |
+| datetime_range | object | Date range configuration |
+| datetime_range.start | string | Start timestamp (YYYY-MM-DDTHH:MM:SS) |
+| datetime_range.end | string | End timestamp (YYYY-MM-DDTHH:MM:SS) |
+| player_ids | array | Array of player IDs |
+| playlist_ids | array | Array of playlist IDs (campaign_sub_ids) or null |
+| asset_ids | array | Array of asset IDs or null |
+| event_types | array | Array of event types or null |
+| active_hours_record_only | boolean | Filter to active hours only |
 
 ### Campaign JSON Object
 
@@ -108,10 +127,25 @@ Retrieves campaign data with creative schedules and metadata. Supports active ca
       "creative_height": 1080,
       "saturation_frequency": 8,
       "purchase_type": "Paid",
-      "player_ids": ["P-001", "P-002"]
+      "player_ids": ["P-001", "P-002"],
+      "campaign_sub_id": 456
     }
   ],
-  "seedooh_verified": true
+  "seedooh_verified": true,
+  "filter_request_data": {
+    "record_output_type": {
+      "Seedooh": 123
+    },
+    "datetime_range": {
+      "start": "2025-09-01T00:00:00",
+      "end": "2025-09-30T23:59:59"
+    },
+    "player_ids": [1, 2, 3],
+    "playlist_ids": [456, 789],
+    "asset_ids": null,
+    "event_types": null,
+    "active_hours_record_only": true
+  }
 }
 ```
 
@@ -295,33 +329,22 @@ Initiates asynchronous report generation for campaign playlogs data.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| campaign_id | integer | Yes | Campaign ID (numeric) |
-| start_date | string | Yes | Start date (YYYY-MM-DD) |
-| end_date | string | Yes | End date (YYYY-MM-DD) |
+| record_output_type | object | Yes | Output type configuration |
+| record_output_type.Seedooh | integer | Yes | Campaign ID for Seedooh integration |
+| datetime_range | object | Yes | Date range configuration |
+| datetime_range.start | string | Yes | Start timestamp (YYYY-MM-DDTHH:MM:SS) |
+| datetime_range.end | string | Yes | End timestamp (YYYY-MM-DDTHH:MM:SS) |
+| player_ids | array | Yes | Array of player IDs |
+| playlist_ids | array | No | Array of playlist IDs (campaign_sub_ids) |
+| asset_ids | array | No | Array of asset IDs (null allowed) |
+| event_types | array | No | Array of event types (null allowed) |
+| active_hours_record_only | boolean | No | Filter to active hours only (default: true) |
 
 ### Response Structure
 
 ```json
 {
-  "success": true,
-  "timestamp": "2025-09-08T04:33:49+00:00",
-  "data": {
-    "success": true,
-    "report_id": "report_68be5cad96587",
-    "status": "processing",
-    "message": "Report generation started by service 1",
-    "estimated_completion": "2025-09-08 04:38:49",
-    "request_id": "req_20250908043349_d1921b8c18cd53d5"
-  },
-  "message": "Report generation initiated successfully",
-  "request_id": "req_20250908043349_8c03f70a",
-  "metadata": {
-    "campaign_name": "temp campaign",
-    "date_range": {
-      "start": "2024-01-01",
-      "end": "2024-01-31"
-    }
-  }
+  "id": "report_68be5cad96587"
 }
 ```
 
@@ -329,15 +352,7 @@ Initiates asynchronous report generation for campaign playlogs data.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| success | boolean | Overall operation success status |
-| timestamp | string | Response timestamp (ISO 8601) |
-| data | object | Report generation details |
-| data.report_id | string | Unique report identifier for fetching |
-| data.status | string | Report status ("processing", "completed", "failed") |
-| data.message | string | Status message |
-| data.estimated_completion | string | Estimated completion time |
-| request_id | string | Unique request identifier |
-| metadata | object | Campaign and date range information |
+| id | string | Unique report identifier for fetching |
 
 ### Generator Example Request
 
@@ -346,9 +361,18 @@ curl -X POST "https://onqcms.com/api/seedooh/campaign_playlogs_generator" \
   -H "Authorization: Bearer <api_key>" \
   -H "Content-Type: application/json" \
   -d '{
-    "campaign_id": 43,
-    "start_date": "2024-01-01",
-    "end_date": "2024-01-31"
+    "record_output_type": {
+      "Seedooh": 43
+    },
+    "datetime_range": {
+      "start": "2024-01-01T00:00:00",
+      "end": "2024-01-31T23:59:59"
+    },
+    "player_ids": [1234, 3405],
+    "playlist_ids": [100, 200],
+    "asset_ids": null,
+    "event_types": null,
+    "active_hours_record_only": true
   }'
 ```
 
@@ -370,51 +394,27 @@ Retrieves completed playlogs data using a report ID from the generator.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| report_id | string | Yes | Report ID from generator API |
+| id | string | Yes | Report ID from generator API |
 
 ### Fetch Response Structure
 
-#### Success Response (Report Ready)
+#### InProgress Response (Report Not Ready)
 
 ```json
 {
-  "success": true,
-  "timestamp": "2025-09-08T04:35:00+00:00",
-  "data": {
-    "status": "completed",
-    "playlogs": [
-      {
-        "campaign_id": "43",
-        "schedule_id": "sch_456",
-        "player_id": "P-001",
-        "timestamp": "2024-01-15T14:30:00+10:00",
-        "duration": 15,
-        "creative_name": "Summer Banner"
-      }
-    ],
-    "total_playlogs": 50,
-    "total_duration": 8232,
-    "date_range": {
-      "start": "2024-01-01",
-      "end": "2024-01-31"
-    }
-  },
-  "message": "Playlogs retrieved successfully"
+  "id": "report_68be5cad96587",
+  "state": "InProgress",
+  "url": null
 }
 ```
 
-#### Processing Response (Report Not Ready)
+#### Complete Response (Report Ready)
 
 ```json
 {
-  "success": true,
-  "timestamp": "2025-09-08T04:33:50+00:00",
-  "data": {
-    "status": "processing",
-    "message": "Report is still being generated",
-    "estimated_completion": "2025-09-08 04:38:49"
-  },
-  "message": "Report is not ready yet"
+  "id": "report_68be5cad96587",
+  "state": "Complete",
+  "url": "https://onqtest.blob.core.windows.net/new-pop-bulk-records-test/pop_bulk_records/01K4K9THDXTFN30ADW3ARDY5PS.db?sv=2022-11-02&sp=r&sr=b&se=2025-09-09T06%3A16%3A50Z&sig=s7ZmSANF4uz2mnosMcuYzFasFMK3kIXIolRlzNkrRQs%3D"
 }
 ```
 
@@ -422,25 +422,9 @@ Retrieves completed playlogs data using a report ID from the generator.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| success | boolean | Overall operation success status |
-| timestamp | string | Response timestamp (ISO 8601) |
-| data | object | Playlogs data or status information |
-| data.status | string | Report status ("completed", "processing", "failed") |
-| data.playlogs | array | Array of playlog objects (when completed) |
-| data.total_playlogs | integer | Total number of playlogs |
-| data.total_duration | integer | Total duration in seconds |
-| message | string | Status message |
-
-### Playlog Object Structure
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| campaign_id | string | Campaign identifier |
-| schedule_id | string | Schedule identifier (prefixed with "sch_") |
-| player_id | string | Player identifier |
-| timestamp | string | Playlog timestamp (ISO 8601) |
-| duration | integer | Play duration in seconds |
-| creative_name | string | Creative asset name |
+| id | string | Report identifier |
+| state | string | Report state ("InProgress" or "Complete") |
+| url | string | Azure Blob Storage URL (null when InProgress, URL when Complete) |
 
 ### Fetch Example Request
 
@@ -449,7 +433,7 @@ curl -X POST "https://onqcms.com/api/seedooh/campaign_playlogs_fetch" \
   -H "Authorization: Bearer <api_key>" \
   -H "Content-Type: application/json" \
   -d '{
-    "report_id": "report_68be5cad96587"
+    "id": "report_68be5cad96587"
   }'
 ```
 
@@ -599,7 +583,18 @@ curl -X POST "https://onqcms.com/api/seedooh/players_fetch" \
 curl -X POST "https://onqcms.com/api/seedooh/campaign_playlogs_generator" \
   -H "Authorization: Bearer <api_key>" \
   -H "Content-Type: application/json" \
-  -d '{"campaign_id": 43, "start_date": "2024-01-01", "end_date": "2024-01-31"}'
+  -d '{
+    "record_output_type": {"Seedooh": 43},
+    "datetime_range": {
+      "start": "2024-01-01T00:00:00",
+      "end": "2024-01-31T23:59:59"
+    },
+    "player_ids": [1234, 3405],
+    "playlist_ids": [100, 200],
+    "asset_ids": null,
+    "event_types": null,
+    "active_hours_record_only": true
+  }'
 ```
 
 ### API Testing Tools
