@@ -1,16 +1,12 @@
 # Seedooh
 
-The Seedooh API provides integration endpoints for the Seedooh platform to interact with the onQ CMS. These endpoints handle campaign data retrieval, player information, and playlog generation for Seedooh's digital out-of-home advertising platform.
+The Seedooh API provides integration endpoints for the Seedooh verification platform to interact with onQ's CMS.
 
 - [Seedooh](#seedooh)
   - [Campaigns Fetch](#campaigns-fetch)
-    - [Endpoint: seedooh/campaigns\_fetch](#endpoint-seedoohcampaigns_fetch)
   - [Players Fetch](#players-fetch)
-    - [Endpoint: seedooh/players\_fetch](#endpoint-seedoohplayers_fetch)
   - [Campaign Playlogs Generator](#campaign-playlogs-generator)
-    - [Endpoint: seedooh/campaign\_playlogs\_generator](#endpoint-seedoohcampaign_playlogs_generator)
   - [Campaign Playlogs Fetch](#campaign-playlogs-fetch)
-    - [Endpoint: seedooh/campaign\_playlogs\_fetch](#endpoint-seedoohcampaign_playlogs_fetch)
 
 [Back to Home](README.md)
 
@@ -221,7 +217,7 @@ Retrieves player data for Seedooh Front End with campaign associations and scree
 
 ### Endpoint: seedooh/campaign_playlogs_generator
 
-Initiates playlog generation for a specific campaign by communicating with the external generator service via NATS.
+Initiates playlog generation for a specific campaign.
 
 **Request Parameters**
 
