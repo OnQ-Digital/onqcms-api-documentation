@@ -2,10 +2,15 @@
 
 The Seedooh API provides integration endpoints for the Seedooh platform to interact with the onQ CMS. These endpoints handle campaign data retrieval, player information, and playlog generation for Seedooh's digital out-of-home advertising platform.
 
-- [Campaigns Fetch](#campaigns-fetch)
-- [Players Fetch](#players-fetch)
-- [Campaign Playlogs Generator](#campaign-playlogs-generator)
-- [Campaign Playlogs Fetch](#campaign-playlogs-fetch)
+- [Seedooh](#seedooh)
+  - [Campaigns Fetch](#campaigns-fetch)
+    - [Endpoint: seedooh/campaigns\_fetch](#endpoint-seedoohcampaigns_fetch)
+  - [Players Fetch](#players-fetch)
+    - [Endpoint: seedooh/players\_fetch](#endpoint-seedoohplayers_fetch)
+  - [Campaign Playlogs Generator](#campaign-playlogs-generator)
+    - [Endpoint: seedooh/campaign\_playlogs\_generator](#endpoint-seedoohcampaign_playlogs_generator)
+  - [Campaign Playlogs Fetch](#campaign-playlogs-fetch)
+    - [Endpoint: seedooh/campaign\_playlogs\_fetch](#endpoint-seedoohcampaign_playlogs_fetch)
 
 [Back to Home](README.md)
 
@@ -91,6 +96,7 @@ Retrieves campaign data for Seedooh Front End with player associations and campa
 **Error Response**
 
 - Status: 400 Bad Request
+
 ```json
 {
   "success": false,
@@ -103,6 +109,7 @@ Retrieves campaign data for Seedooh Front End with player associations and campa
 ```
 
 - Status: 401 Unauthorized
+
 ```json
 {
   "success": false,
@@ -112,6 +119,7 @@ Retrieves campaign data for Seedooh Front End with player associations and campa
 ```
 
 - Status: 404 Not Found
+
 ```json
 {
   "success": false,
@@ -187,6 +195,7 @@ Retrieves player data for Seedooh Front End with campaign associations and scree
 **Error Response**
 
 - Status: 400 Bad Request
+
 ```json
 {
   "success": false,
@@ -199,6 +208,7 @@ Retrieves player data for Seedooh Front End with campaign associations and scree
 ```
 
 - Status: 401 Unauthorized
+
 ```json
 {
   "error": "User is not logged in."
@@ -250,6 +260,7 @@ Initiates playlog generation for a specific campaign by communicating with the e
 **Error Response**
 
 - Status: 400 Bad Request
+
 ```json
 {
   "success": false,
@@ -264,6 +275,7 @@ Initiates playlog generation for a specific campaign by communicating with the e
 ```
 
 - Status: 401 Unauthorized
+
 ```json
 {
   "success": false,
@@ -273,6 +285,7 @@ Initiates playlog generation for a specific campaign by communicating with the e
 ```
 
 - Status: 404 Not Found
+
 ```json
 {
   "success": false,
@@ -282,6 +295,7 @@ Initiates playlog generation for a specific campaign by communicating with the e
 ```
 
 - Status: 503 Service Unavailable
+
 ```json
 {
   "success": false,
@@ -314,7 +328,9 @@ Retrieves generated playlog data by report ID, checking status and returning par
 
 **Success Response**
 
-- Status: 200 OK
+The endpoint returns a JSON structure only when the report status is "Complete" or "InProgress". For all other states, the response will be an error.
+
+- Status: 200 OK (Complete)
 
 ```json
 {
@@ -343,9 +359,7 @@ Retrieves generated playlog data by report ID, checking status and returning par
 }
 ```
 
-**Processing Response**
-
-- Status: 200 OK
+- Status: 200 OK (InProgress)
 
 ```json
 {
@@ -358,6 +372,7 @@ Retrieves generated playlog data by report ID, checking status and returning par
 **Error Response**
 
 - Status: 400 Bad Request
+
 ```json
 {
   "success": false,
@@ -370,6 +385,7 @@ Retrieves generated playlog data by report ID, checking status and returning par
 ```
 
 - Status: 401 Unauthorized
+
 ```json
 {
   "success": false,
@@ -379,6 +395,7 @@ Retrieves generated playlog data by report ID, checking status and returning par
 ```
 
 - Status: 500 Internal Server Error
+
 ```json
 {
   "error": "Failed to read report file"
@@ -386,6 +403,7 @@ Retrieves generated playlog data by report ID, checking status and returning par
 ```
 
 - Status: 503 Service Unavailable
+
 ```json
 {
   "success": false,
