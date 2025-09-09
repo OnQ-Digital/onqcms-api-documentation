@@ -328,35 +328,29 @@ Retrieves generated playlog data by report ID, checking status and returning par
 
 **Success Response**
 
-The endpoint returns a JSON structure only when the report status is "Complete" or "InProgress". For all other states, the response will be an error.
+The endpoint returns a JSON array of playlog data when the report status is "Complete", or a status object when "InProgress". For all other states, the response will be an error.
 
 - Status: 200 OK (Complete)
 
 ```json
-{
-  "id": "report_20240115_143022_a1b2c3d4",
-  "state": "Complete",
-  "data": [
-    {
-      "player_id": 1144,
-      "asset_id": 33361,
-      "play_time": "2024-01-15 10:30:00",
-      "duration": 10,
-      "campaign_id": 123,
-      "campaign_name": "Summer Campaign 2024"
-    },
-    {
-      "player_id": 1144,
-      "asset_id": 33362,
-      "play_time": "2024-01-15 10:30:10",
-      "duration": 15,
-      "campaign_id": 123,
-      "campaign_name": "Summer Campaign 2024"
-    }
-  ],
-  "total_records": 2,
-  "url": "https://storage.azure.com/reports/report_20240115_143022_a1b2c3d4.sql"
-}
+[
+  {
+    "player_id": 1144,
+    "asset_id": 33361,
+    "play_time": "2024-01-15 10:30:00",
+    "duration": 10,
+    "campaign_id": 123,
+    "campaign_name": "Summer Campaign 2024"
+  },
+  {
+    "player_id": 1144,
+    "asset_id": 33362,
+    "play_time": "2024-01-15 10:30:10",
+    "duration": 15,
+    "campaign_id": 123,
+    "campaign_name": "Summer Campaign 2024"
+  }
+]
 ```
 
 - Status: 200 OK (InProgress)
