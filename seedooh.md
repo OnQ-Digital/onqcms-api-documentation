@@ -60,14 +60,28 @@ Retrieves campaign data for Seedooh Front End with player associations and campa
     "campaign_title": "Summer Campaign 2024",
     "advertiser": "Brand Name",
     "media_buyer": "Agency Name",
-    "campaign_categories": [],
-    "campaign_creative_schedules": [
+    "playlist_ids": [456, 457],
+    "schedules": [
       {
+        "schedule_id": "sch_456",
         "campaign_sub_id": 456,
+        "playlist_id": 456,
         "start_date": "2024-01-01",
         "end_date": "2024-12-31",
-        "player_ids": [1144, 1153],
-        "playlist_content": [33361, 33362]
+        "asset_ids": [33361, 33362],
+        "assets": [
+          {
+            "asset_id": 33361,
+            "name": "Creative Asset 1",
+            "download_url": "https://cdn.example.com/media/asset1.mp4"
+          },
+          {
+            "asset_id": 33362,
+            "name": "Creative Asset 2",
+            "download_url": "https://cdn.example.com/media/asset2.mp4"
+          }
+        ],
+        "player_ids": [1144, 1153]
       }
     ],
     "seedooh_verified": true,
@@ -79,9 +93,6 @@ Retrieves campaign data for Seedooh Front End with player associations and campa
         "start": "2024-01-01T00:00:00",
         "end": "2024-12-31T23:59:59"
       },
-      "player_ids": [1144, 1153],
-      "playlist_ids": [456],
-      "asset_ids": null,
       "event_types": null,
       "active_hours_record_only": true
     }
@@ -136,12 +147,12 @@ Retrieves player data for Seedooh Front End with campaign associations and scree
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| name | string | False | Player name filter (partial match) |
-| uid | string | False | Player unique ID (exact match) |
-| folder | object | False | Folder filter object |
-| folder.path | array | False | Array of folder path strings |
-| folder.recurse | boolean | False | Include subfolders (default: true) |
-| tags | array | False | Array of tag names to filter by |
+| name | string | False | Player name filter (partial match on site_name or store_name) |
+| uid | string | False | Player unique ID (exact match on player_id). If provided, name filter is ignored |
+| folder_path | array | False | Array of folder path strings for hierarchical folder navigation |
+| folder_recurse | boolean | False | Include subfolders when filtering by folder (default: true) |
+| folder_name | string | False | Alternative to folder_path - single folder name |
+| tags | array | False | Array of tag names to filter by (all tags must match) |
 | timezone | string | False | Timezone for date formatting (default: UTC) |
 | company_group_id | integer | False | Company group ID for validation |
 
@@ -150,10 +161,8 @@ Retrieves player data for Seedooh Front End with campaign associations and scree
 ```json
 {
   "name": "demo",
-  "folder": {
-    "path": ["Australia", "Melbourne"],
-    "recurse": true
-  },
+  "folder_path": ["Australia", "Melbourne"],
+  "folder_recurse": true,
   "tags": ["demo", "AU"],
   "timezone": "Australia/Melbourne"
 }
@@ -166,24 +175,21 @@ Retrieves player data for Seedooh Front End with campaign associations and scree
 ```json
 [
   {
-    "mediaplayer_id": 1144,
-    "player_id": "demo123",
-    "site_name": "Demo Player",
-    "store_name": "Demo Store",
-    "resolution_width": 1920,
-    "resolution_height": 1080,
-    "last_update": "2024-01-15T10:35:53+10:00",
-    "screenshot_update": "2024-01-15T10:35:53+10:00",
-    "screenshot": "https://onqcms.com/api/seedooh/userfiles/user123/SCREENSHOT/screenshot.jpg",
-    "folder_path": ["Australia", "Melbourne"],
-    "tags": ["demo", "AU"],
-    "campaigns": [
-      {
-        "campaign_id": 123,
-        "campaign_name": "Summer Campaign 2024",
-        "status": "live"
-      }
-    ]
+    "player_name": "Demo Player",
+    "player_id": 1144,
+    "address": "123 Main Street",
+    "region": "Victoria",
+    "state": "VIC",
+    "format": "Digital Billboard",
+    "category": "Retail",
+    "longitude": "144.9631",
+    "latitude": "-37.8136",
+    "pixel_width": 1920,
+    "pixel_height": 1080,
+    "max_slots_per_loop": 10,
+    "default_slot_duration": 10,
+    "n_screens": 1,
+    "operating_hours": ["06:00-22:00"]
   }
 ]
 ```
@@ -226,8 +232,9 @@ Initiates playlog generation for a specific campaign.
 | record_output_type | object | True | Record output type configuration |
 | record_output_type.Seedooh | integer | True | Campaign ID for Seedooh output |
 | datetime_range | object | True | Date range for playlog generation |
-| datetime_range.start | string | True | Start date time (YYYY-MM-DD HH:MM:SS) |
-| datetime_range.end | string | True | End date time (YYYY-MM-DD HH:MM:SS) |
+| datetime_range.start | string | True | Start date time (YYYY-MM-DDTHH:MM:SS) |
+| datetime_range.end | string | True | End date time (YYYY-MM-DDTHH:MM:SS) |
+| player_ids | array | False | Array of player IDs to filter report. If not provided, all campaign players are included. Only players assigned to the campaign will be included |
 
 **Request Example**
 
@@ -237,9 +244,10 @@ Initiates playlog generation for a specific campaign.
     "Seedooh": 123
   },
   "datetime_range": {
-    "start": "2024-01-01 00:00:00",
-    "end": "2024-01-31 23:59:59"
-  }
+    "start": "2024-01-01T00:00:00",
+    "end": "2024-01-31T23:59:59"
+  },
+  "player_ids": [1144, 1153]
 }
 ```
 
@@ -285,7 +293,7 @@ Initiates playlog generation for a specific campaign.
 ```json
 {
   "success": false,
-  "error": "Campaign not found or access denied",
+  "error": "Campaign not found or not available for Seedooh reporting",
   "request_id": "req_20240115_143022_a1b2c3d4"
 }
 ```
@@ -295,7 +303,7 @@ Initiates playlog generation for a specific campaign.
 ```json
 {
   "success": false,
-  "error": "Failed to initiate report generation with external generator service",
+  "error": "Failed to initiate report generation",
   "request_id": "req_20240115_143022_a1b2c3d4"
 }
 ```
@@ -324,29 +332,19 @@ Retrieves generated playlog data by report ID, checking status and returning par
 
 **Success Response**
 
-The endpoint returns a JSON array of playlog data when the report status is "Complete", or a status object when "InProgress". For all other states, the response will be an error.
+The endpoint returns a status object with the report state. The `state` field indicates the report status: "Complete", "InProgress", or "Failed". When complete, the `url` field contains the download URL for the report data.
 
 - Status: 200 OK (Complete)
 
 ```json
-[
-  {
-    "player_id": 1144,
-    "asset_id": 33361,
-    "play_time": "2024-01-15 10:30:00",
-    "duration": 10,
-    "campaign_id": 123,
-    "campaign_name": "Summer Campaign 2024"
-  },
-  {
-    "player_id": 1144,
-    "asset_id": 33362,
-    "play_time": "2024-01-15 10:30:10",
-    "duration": 15,
-    "campaign_id": 123,
-    "campaign_name": "Summer Campaign 2024"
-  }
-]
+{
+  "id": "report_20240115_143022_a1b2c3d4",
+  "state": "Complete",
+  "url": "https://storage.example.com/reports/report_20240115_143022_a1b2c3d4.sql",
+  "error_message": null,
+  "size_bytes": 102400,
+  "generated_at": "2024-01-15T14:35:00Z"
+}
 ```
 
 - Status: 200 OK (InProgress)
@@ -355,7 +353,23 @@ The endpoint returns a JSON array of playlog data when the report status is "Com
 {
   "id": "report_20240115_143022_a1b2c3d4",
   "state": "InProgress",
-  "url": null
+  "url": null,
+  "error_message": null,
+  "size_bytes": null,
+  "generated_at": null
+}
+```
+
+- Status: 200 OK (Failed)
+
+```json
+{
+  "id": "report_20240115_143022_a1b2c3d4",
+  "state": "Failed",
+  "url": null,
+  "error_message": "Report generation timed out",
+  "size_bytes": null,
+  "generated_at": null
 }
 ```
 
@@ -365,12 +379,7 @@ The endpoint returns a JSON array of playlog data when the report status is "Com
 
 ```json
 {
-  "success": false,
-  "error": "Validation failed",
-  "details": {
-    "id": "Report ID is required"
-  },
-  "code": 400
+  "error": "Report ID is required"
 }
 ```
 
@@ -378,9 +387,15 @@ The endpoint returns a JSON array of playlog data when the report status is "Com
 
 ```json
 {
-  "success": false,
-  "error": "User is not logged in",
-  "code": 401
+  "error": "User is not logged in"
+}
+```
+
+- Status: 404 Not Found
+
+```json
+{
+  "error": "Report not found or access denied"
 }
 ```
 
@@ -388,7 +403,8 @@ The endpoint returns a JSON array of playlog data when the report status is "Com
 
 ```json
 {
-  "error": "Failed to read report file"
+  "error": "An unexpected error occurred while fetching playlogs",
+  "message": "Please try again later or contact support if the issue persists"
 }
 ```
 
@@ -396,9 +412,7 @@ The endpoint returns a JSON array of playlog data when the report status is "Com
 
 ```json
 {
-  "success": false,
-  "error": "Report status service is currently unavailable",
-  "code": 503
+  "error": "Failed to fetch report status"
 }
 ```
 
