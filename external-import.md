@@ -4,6 +4,8 @@ The External Import API allows external systems (e.g., VAMS) to programmatically
 
 **Sync model**: Full-state. Each call sends the complete list of active bookings; the system reconciles to match. Expired campaigns are invisible to the sync process.
 
+**Two-phase workflow**: The Sync endpoint handles campaign booking (create/update/deactivate). Content downloading, encoding, and dimension validation happen out-of-band — use the Status endpoint to check content readiness and warnings.
+
 [Back to Home](README.md)
 
 # TOC
@@ -17,6 +19,8 @@ The External Import API allows external systems (e.g., VAMS) to programmatically
   - [2.1. Request Format (GET)](#21-request-format-get)
   - [2.2. Request Format (POST)](#22-request-format-post)
   - [2.3. Response Format](#23-response-format)
+  - [2.4. Content Status Values](#24-content-status-values)
+  - [2.5. Warnings](#25-warnings)
 
 ---
 
@@ -29,6 +33,8 @@ The External Import API allows external systems (e.g., VAMS) to programmatically
 ```
 Authorization: Bearer {api_key}
 ```
+
+Receives booking items, translates them into campaigns, and reconciles with existing CMS state. Content is downloaded and processed during sync, but content status and dimension warnings are reported via the [Status endpoint](#2-status-endpoint).
 
 ## 1.1. Request Format
 
@@ -109,6 +115,8 @@ A dry run performs translation and classification (which campaigns would be crea
 
 ## 1.2. Response Format
 
+The sync response covers booking outcomes only. Use the [Status endpoint](#2-status-endpoint) to check content download/encoding status and dimension warnings.
+
 ```json
 {
     "result": "ok",
@@ -130,18 +138,6 @@ A dry run performs translation and classification (which campaigns would be crea
         }
     ],
     "warnings": [],
-    "content_status": {
-        "downloaded": 1,
-        "failed": 0,
-        "encoding_queued": 0,
-        "details": [
-            {
-                "content_id": "4vwhq2gg-zju2-lqlm-m1hn-e93xwgqrp9aa",
-                "file_content_id": 1234,
-                "status": "ready"
-            }
-        ]
-    },
     "errors": []
 }
 ```
@@ -164,20 +160,11 @@ A dry run performs translation and classification (which campaigns would be crea
 | `ended` | Campaign end_date set to now (campaign has playback history, cannot be deleted) |
 | `skipped_linked` | Campaign is tagged as "linked" (user-managed); not modified by sync |
 
-**Content Status Values**:
-
-| Status | Description |
-|--------|-------------|
-| `ready` | Content downloaded and available for playback |
-| `encoding_queued` | Video accepted but queued for h264 baseline encoding. Use the Status endpoint to poll for completion. |
-| `download_failed` | Content URL could not be downloaded. See `error` field for details (e.g., `"HTTP 403"`, `"timeout"`). |
-| `rejected` | File format is not supported (not an image or video) |
-| `upload_failed` | File downloaded successfully but failed to upload to storage |
-| `db_error` | File processed but database record could not be created |
+After a successful sync, use the `campaign_id` from the response to query the [Status endpoint](#2-status-endpoint) for content readiness and any dimension warnings.
 
 ## 1.3. Warnings
 
-Warnings indicate non-fatal issues. The sync continues despite warnings, but the affected items may not behave as expected. Warnings are returned in the top-level `warnings` array.
+Warnings indicate non-fatal booking issues. The sync continues despite warnings, but the affected items may not behave as expected. Warnings are returned in the top-level `warnings` array.
 
 ### Unmatched Player
 
@@ -237,26 +224,6 @@ A managed campaign was removed from the payload but has playback history, so it 
 
 **Note**: This is expected behavior. Campaigns with playback history are preserved for reporting purposes.
 
-### Dimension Mismatch
-
-Content dimensions (aspect ratio) do not match an assigned player's dimensions, even accounting for the player's configured tolerance. The campaign is still created — the CMS handles playback scaling — but this may indicate the wrong content was assigned.
-
-```json
-{
-    "type": "dimension_mismatch",
-    "campaign": "VAMS #3940 - TOM FORD",
-    "sub_campaign": "TOM FORD - promo (2026-01-12 to 2026-02-15)",
-    "content_id": 1234,
-    "content_dimensions": "1920x1080",
-    "player_id": 567,
-    "player_store": "3201DS0061",
-    "player_dimensions": "1080x1920",
-    "tolerance": 5
-}
-```
-
-**Action required**: Verify the content was intended for this player. Portrait content on landscape players (or vice versa) will be letterboxed or scaled. If the mismatch is expected, no action is needed.
-
 ## 1.4. Errors
 
 Errors indicate items that were rejected during translation and not processed. Errors are returned in the top-level `errors` array.
@@ -315,12 +282,25 @@ All URLs for a booking item failed content_id extraction. The item was skipped.
 Authorization: Bearer {api_key}
 ```
 
-Check content download and encoding status after a sync. Use this to poll for video encoding completion.
+Check content download status, encoding progress, and dimension warnings after a sync. Use this to poll for video encoding completion and to verify content dimensions match assigned players.
+
+Query by `content_ids` (filename UUIDs) and/or `campaign_id`. When `campaign_id` is provided, the endpoint automatically resolves the campaign's assigned content and players, and includes dimension mismatch warnings.
 
 ## 2.1. Request Format (GET)
 
+**By content IDs**:
 ```
 GET /api/external_import_status.php?content_ids=4vwhq2gg-zju2-lqlm-m1hn-e93xwgqrp9aa,a1b2c3d4-e5f6-7890-abcd-ef1234567890
+```
+
+**By campaign ID** (includes dimension warnings):
+```
+GET /api/external_import_status.php?campaign_id=456
+```
+
+**Both** (content_ids are merged with the campaign's content):
+```
+GET /api/external_import_status.php?campaign_id=456&content_ids=4vwhq2gg-zju2-lqlm-m1hn-e93xwgqrp9aa
 ```
 
 ## 2.2. Request Format (POST)
@@ -330,9 +310,17 @@ GET /api/external_import_status.php?content_ids=4vwhq2gg-zju2-lqlm-m1hn-e93xwgqr
     "content_ids": [
         "4vwhq2gg-zju2-lqlm-m1hn-e93xwgqrp9aa",
         "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
-    ]
+    ],
+    "campaign_id": 456
 }
 ```
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| content_ids | array | No* | Array of content ID strings (filename UUIDs) |
+| campaign_id | integer | No* | Campaign ID from the sync response. Resolves content and players automatically. |
+
+*At least one of `content_ids` or `campaign_id` must be provided.
 
 ## 2.3. Response Format
 
@@ -356,11 +344,25 @@ GET /api/external_import_status.php?content_ids=4vwhq2gg-zju2-lqlm-m1hn-e93xwgqr
             "height": 1080,
             "format": "mp4"
         }
+    ],
+    "warnings": [
+        {
+            "type": "dimension_mismatch",
+            "content_id": "4vwhq2gg-zju2-lqlm-m1hn-e93xwgqrp9aa",
+            "file_content_id": 1234,
+            "content_dimensions": "1920x1080",
+            "player_id": 567,
+            "player_store": "3201DS0061",
+            "player_dimensions": "1080x1920",
+            "tolerance": 5
+        }
     ]
 }
 ```
 
-**Status Values**:
+The `warnings` array is only present when `campaign_id` is provided and dimension mismatches are detected. When querying by `content_ids` only, no dimension check is performed (no player context available).
+
+## 2.4. Content Status Values
 
 | Status | Description |
 |--------|-------------|
@@ -369,3 +371,34 @@ GET /api/external_import_status.php?content_ids=4vwhq2gg-zju2-lqlm-m1hn-e93xwgqr
 | `encoding_error` | Encoding failed |
 | `encoding_timeout` | Encoding timed out |
 | `not_found` | Content ID not found in the system (not yet downloaded or invalid) |
+
+## 2.5. Warnings
+
+### Dimension Mismatch
+
+Returned when `campaign_id` is provided. Content dimensions (aspect ratio) do not match an assigned player's dimensions, even accounting for the player's configured tolerance. The campaign still plays — the CMS handles scaling — but this may indicate the wrong content was assigned.
+
+```json
+{
+    "type": "dimension_mismatch",
+    "content_id": "4vwhq2gg-zju2-lqlm-m1hn-e93xwgqrp9aa",
+    "file_content_id": 1234,
+    "content_dimensions": "1920x1080",
+    "player_id": 567,
+    "player_store": "3201DS0061",
+    "player_dimensions": "1080x1920",
+    "tolerance": 5
+}
+```
+
+| Field | Description |
+|-------|-------------|
+| `content_id` | The filename UUID of the content |
+| `file_content_id` | Internal CMS content ID |
+| `content_dimensions` | Content width x height |
+| `player_id` | Internal CMS player ID |
+| `player_store` | Player store name for identification |
+| `player_dimensions` | Player configured width x height |
+| `tolerance` | Aspect ratio tolerance percentage configured for this player |
+
+**Action required**: Verify the content was intended for this player. Portrait content on landscape players (or vice versa) will be letterboxed or scaled. If the mismatch is expected, no action is needed.
