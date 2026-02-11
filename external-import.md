@@ -376,7 +376,7 @@ The `warnings` array is only present when `campaign_id` is provided and dimensio
 
 ### Dimension Mismatch
 
-Returned when `campaign_id` is provided. Content dimensions (aspect ratio) do not match an assigned player's dimensions, even accounting for the player's configured tolerance. The campaign still plays — the CMS handles scaling — but this may indicate the wrong content was assigned.
+Returned when `campaign_id` is provided. Content dimensions (aspect ratio) do not match an assigned player's dimensions, even accounting for the player's configured tolerance. Content outside the tolerance will not play — the player will skip the campaign during playback until content with a matching aspect ratio is provided.
 
 ```json
 {
@@ -401,4 +401,4 @@ Returned when `campaign_id` is provided. Content dimensions (aspect ratio) do no
 | `player_dimensions` | Player configured width x height |
 | `tolerance` | Aspect ratio tolerance percentage configured for this player |
 
-**Action required**: Verify the content was intended for this player. Portrait content on landscape players (or vice versa) will be letterboxed or scaled. If the mismatch is expected, no action is needed.
+**Action required**: The affected player will skip this campaign during playback. Provide content with a matching aspect ratio to resolve.
