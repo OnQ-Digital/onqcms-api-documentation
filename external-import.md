@@ -237,6 +237,26 @@ A managed campaign was removed from the payload but has playback history, so it 
 
 **Note**: This is expected behavior. Campaigns with playback history are preserved for reporting purposes.
 
+### Dimension Mismatch
+
+Content dimensions (aspect ratio) do not match an assigned player's dimensions, even accounting for the player's configured tolerance. The campaign is still created — the CMS handles playback scaling — but this may indicate the wrong content was assigned.
+
+```json
+{
+    "type": "dimension_mismatch",
+    "campaign": "VAMS #3940 - TOM FORD",
+    "sub_campaign": "TOM FORD - promo (2026-01-12 to 2026-02-15)",
+    "content_id": 1234,
+    "content_dimensions": "1920x1080",
+    "player_id": 567,
+    "player_store": "3201DS0061",
+    "player_dimensions": "1080x1920",
+    "tolerance": 5
+}
+```
+
+**Action required**: Verify the content was intended for this player. Portrait content on landscape players (or vice versa) will be letterboxed or scaled. If the mismatch is expected, no action is needed.
+
 ## 1.4. Errors
 
 Errors indicate items that were rejected during translation and not processed. Errors are returned in the top-level `errors` array.
