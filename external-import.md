@@ -10,14 +10,13 @@ The External Import API allows external systems (e.g., VAMS) to programmatically
 - [1. Sync Endpoint](#1-sync-endpoint)
   - [1.1. Request Format](#11-request-format)
   - [1.2. Response Format](#12-response-format)
-  - [1.3. Sync Behavior](#13-sync-behavior)
+  - [1.3. Warnings](#13-warnings)
+  - [1.4. Errors](#14-errors)
+  - [1.5. Sync Behavior](#15-sync-behavior)
 - [2. Status Endpoint](#2-status-endpoint)
   - [2.1. Request Format (GET)](#21-request-format-get)
   - [2.2. Request Format (POST)](#22-request-format-post)
   - [2.3. Response Format](#23-response-format)
-- [3. Config Endpoints (Admin)](#3-config-endpoints-admin)
-  - [3.1. Fetch Config](#31-fetch-config)
-  - [3.2. Save Config](#32-save-config)
 
 ---
 
@@ -25,7 +24,11 @@ The External Import API allows external systems (e.g., VAMS) to programmatically
 
 **Endpoint**: `POST /api/external_import_sync.php`
 
-**Authentication**: Bearer token (API key) or session-based authentication.
+**Authentication**: Bearer token (API key).
+
+```
+Authorization: Bearer {api_key}
+```
 
 ## 1.1. Request Format
 
@@ -33,7 +36,7 @@ The External Import API allows external systems (e.g., VAMS) to programmatically
 | Header | Value | Required |
 |--------|-------|----------|
 | Content-Type | application/json | Yes |
-| Authorization | Bearer {api_key} | Yes (or session cookie) |
+| Authorization | Bearer {api_key} | Yes |
 
 **Request Body**:
 
@@ -41,7 +44,7 @@ The External Import API allows external systems (e.g., VAMS) to programmatically
 |-----------|------|----------|-------------|
 | system | string | No | External system identifier. Default: `"vams"` |
 | company_group_id | integer | No | Must match authenticated user's group |
-| dry_run | boolean | No | If true, returns what would happen without making changes |
+| dry_run | boolean | No | If `true`, returns what would happen without making any changes. Useful for testing. |
 | items | array | Yes | Array of booking items from the external system |
 
 **VAMS Item Schema**:
@@ -92,6 +95,18 @@ The External Import API allows external systems (e.g., VAMS) to programmatically
 }
 ```
 
+**Dry Run Example**:
+
+```json
+{
+    "system": "vams",
+    "dry_run": true,
+    "items": [ ... ]
+}
+```
+
+A dry run performs translation and classification (which campaigns would be created, updated, or deactivated) but does not make any changes. The response will have `"result": "dry_run"` instead of `"ok"`.
+
 ## 1.2. Response Format
 
 ```json
@@ -131,26 +146,126 @@ The External Import API allows external systems (e.g., VAMS) to programmatically
 }
 ```
 
+**Result Values**:
+
+| Value | Description |
+|-------|-------------|
+| `ok` | Sync completed successfully |
+| `dry_run` | Dry run completed; no changes made |
+| `error` | Sync could not run (e.g., no config found) |
+
 **Campaign Action Values**:
 
 | Action | Description |
 |--------|-------------|
 | `created` | New campaign created |
-| `updated` | Existing live managed campaign updated |
-| `deleted` | Campaign hard-deleted (never played) |
-| `ended` | Campaign end_date set to now (has playback history) |
-| `skipped_linked` | Campaign is tagged as linked; not modified by sync |
+| `updated` | Existing live managed campaign updated (all sub-campaigns rebuilt) |
+| `deleted` | Campaign hard-deleted (campaign had never been played) |
+| `ended` | Campaign end_date set to now (campaign has playback history, cannot be deleted) |
+| `skipped_linked` | Campaign is tagged as "linked" (user-managed); not modified by sync |
 
 **Content Status Values**:
 
 | Status | Description |
 |--------|-------------|
-| `ready` | Content downloaded and available |
-| `encoding_queued` | Video queued for h264 baseline encoding |
-| `download_failed` | Download failed (see `error` field) |
-| `rejected` | Unsupported format |
+| `ready` | Content downloaded and available for playback |
+| `encoding_queued` | Video accepted but queued for h264 baseline encoding. Use the Status endpoint to poll for completion. |
+| `download_failed` | Content URL could not be downloaded. See `error` field for details (e.g., `"HTTP 403"`, `"timeout"`). |
+| `rejected` | File format is not supported (not an image or video) |
+| `upload_failed` | File downloaded successfully but failed to upload to storage |
+| `db_error` | File processed but database record could not be created |
 
-## 1.3. Sync Behavior
+## 1.3. Warnings
+
+Warnings indicate non-fatal issues. The sync continues despite warnings, but the affected items may not behave as expected. Warnings are returned in the top-level `warnings` array.
+
+### Unmatched Player
+
+A player code from the payload could not be matched to any player in the CMS (via `store_name` or `site_name` LIKE search). The campaign is still created, but without this player assigned.
+
+```json
+{
+    "type": "unmatched_player",
+    "code": "UNKNOWN123",
+    "campaign": "VAMS #3940 - TOM FORD"
+}
+```
+
+**Action required**: Verify the player code is correct and that the player exists in the CMS with a matching `store_name` or `site_name`.
+
+### Unmapped Slot
+
+An external slot name (e.g., `vaType`) has no mapping configured in the CMS admin. The sub-campaign is still created but assigned to the `"default"` slot group.
+
+```json
+{
+    "warning": "Unmapped external slot",
+    "slot": "Digital Screen - Escalator",
+    "campaign": "VAMS #3940 - TOM FORD"
+}
+```
+
+**Action required**: Add the slot mapping in the CMS admin under External Import configuration.
+
+### Content ID Extraction Failed
+
+A URL in the payload could not be parsed to extract the content identifier (filename UUID). The content item is skipped for that sub-campaign.
+
+```json
+{
+    "item_index": 3,
+    "warning": "Could not extract content_id from URL",
+    "url": "https://example.com/invalid-path",
+    "orderNumber": "3940"
+}
+```
+
+**Action required**: Check that the URL has a valid file path with a filename and extension (e.g., `.mp4`, `.png`).
+
+### Ended Not Deleted
+
+A managed campaign was removed from the payload but has playback history, so it cannot be hard-deleted. Instead, its end_date was set to now, making it "finished".
+
+```json
+{
+    "type": "ended_not_deleted",
+    "campaign": "VAMS #3941 - DIOR",
+    "campaign_id": 457,
+    "reason": "has playback history"
+}
+```
+
+**Note**: This is expected behavior. Campaigns with playback history are preserved for reporting purposes.
+
+## 1.4. Errors
+
+Errors indicate items that were rejected during translation and not processed. Errors are returned in the top-level `errors` array.
+
+### Missing Required Fields
+
+A booking item is missing one or more required fields and was skipped entirely.
+
+```json
+{
+    "item_index": 5,
+    "error": "Missing required fields: startDate, url",
+    "orderNumber": "3940"
+}
+```
+
+### No Valid Content URLs
+
+All URLs for a booking item failed content_id extraction. The item was skipped.
+
+```json
+{
+    "item_index": 7,
+    "error": "No valid content URLs found",
+    "orderNumber": "3940"
+}
+```
+
+## 1.5. Sync Behavior
 
 **Grouping rules**:
 - Items with the same `orderNumber` become one CMS campaign (named `"VAMS #{orderNumber} - {brand}"`)
@@ -166,7 +281,7 @@ The External Import API allows external systems (e.g., VAMS) to programmatically
 - Live managed campaigns missing from payload, has played: SET end_date = NOW
 - Orders matching only expired campaigns: CREATE new (expired campaigns are invisible)
 
-**Content dedup**: Content is identified by the filename UUID extracted from the URL path (the `content_id`). If the same `content_id` exists in `file_content.file_uid`, the existing content is reused without re-downloading.
+**Content dedup**: Content is identified by the filename UUID extracted from the URL path (the `content_id`). If the same `content_id` already exists in the CMS, the existing content is reused without re-downloading.
 
 ---
 
@@ -174,9 +289,13 @@ The External Import API allows external systems (e.g., VAMS) to programmatically
 
 **Endpoint**: `GET /api/external_import_status.php` or `POST /api/external_import_status.php`
 
-**Authentication**: Bearer token (API key) or session-based authentication.
+**Authentication**: Bearer token (API key).
 
-Check content download and encoding status after a sync.
+```
+Authorization: Bearer {api_key}
+```
+
+Check content download and encoding status after a sync. Use this to poll for video encoding completion.
 
 ## 2.1. Request Format (GET)
 
@@ -223,83 +342,10 @@ GET /api/external_import_status.php?content_ids=4vwhq2gg-zju2-lqlm-m1hn-e93xwgqr
 
 **Status Values**:
 
-| Status | `encode_wait` value | Description |
-|--------|---------------------|-------------|
-| `ready` | 0 | Content is ready for playback |
-| `encoding_queued` | 1 | Video is queued for encoding |
-| `encoding_error` | 2 | Encoding failed |
-| `encoding_timeout` | 3 | Encoding timed out |
-| `not_found` | N/A | Content ID not found in system |
-
----
-
-# 3. Config Endpoints (Admin)
-
-These endpoints are for the admin UI. Authentication: session-based only (admin users).
-
-## 3.1. Fetch Config
-
-**Endpoint**: `POST /api/external_import_config_fetch.php`
-
-**Request**:
-```json
-{
-    "system_name": "vams"
-}
-```
-
-Omit `system_name` to fetch all configs for the group.
-
-**Response**:
-```json
-{
-    "config": {
-        "config_id": 1,
-        "company_group_id": 42,
-        "system_name": "vams",
-        "slot_mapping": {
-            "Behind POS Counter": ["pos-counter-left", "pos-counter-right"],
-            "Main Entrance": ["entrance"]
-        },
-        "managed_tag_name": "vams-managed",
-        "linked_tag_name": "vams-linked",
-        "is_active": 1
-    }
-}
-```
-
-## 3.2. Save Config
-
-**Endpoint**: `POST /api/external_import_config_save.php`
-
-**Request**:
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| system_name | string | Yes | External system identifier |
-| slot_mapping | object | Yes | `{"External Name": ["internal_group_1", ...]}` |
-| managed_tag_name | string | Yes | Tag name for auto-managed campaigns |
-| linked_tag_name | string | Yes | Tag name for user-managed (skipped) campaigns |
-| is_active | integer | No | 1 = active, 0 = inactive. Default: 1 |
-
-**Request Example**:
-```json
-{
-    "system_name": "vams",
-    "slot_mapping": {
-        "Behind POS Counter": ["pos-counter-left", "pos-counter-right"],
-        "Main Entrance": ["entrance"]
-    },
-    "managed_tag_name": "vams-managed",
-    "linked_tag_name": "vams-linked",
-    "is_active": 1
-}
-```
-
-**Response**:
-```json
-{
-    "result": "ok",
-    "config": { ... }
-}
-```
+| Status | Description |
+|--------|-------------|
+| `ready` | Content is ready for playback |
+| `encoding_queued` | Video is queued for encoding to h264 baseline |
+| `encoding_error` | Encoding failed |
+| `encoding_timeout` | Encoding timed out |
+| `not_found` | Content ID not found in the system (not yet downloaded or invalid) |
